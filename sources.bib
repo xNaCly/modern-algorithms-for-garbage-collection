@@ -1,3 +1,4 @@
+// Go
 @online{go_gcguide_2022, 
     title = {A Guide to the Go Garbage Collector},
     url = {https://tip.golang.org/doc/gc-guide},
@@ -10,12 +11,14 @@
     urldate = {2023-10-09},
 }
 
+// ocaml
 @online{ocmal_gc_unknown, 
     title = {Garbage Collection},
     url = {https://ocaml.org/docs/garbage-collection},
     urldate = {2023-10-09},
 }
 
+// Python
 @online{python_gclib_2023, 
     title = {gc - Garbage Collector interface},
     url = {https://docs.python.org/3.13/library/gc.html},
@@ -27,3 +30,46 @@
     url = {https://devguide.python.org/internals/garbage-collector/index.html},
     urldate = {2023-10-09},
 }
+
+// Java
+@inproceedings{java_gc_full_analysis_2018,
+    author = {Li, Haoyu and Wu, Mingyu and Chen, Haibo},
+    title = {Analysis and Optimizations of Java Full Garbage Collection},
+    year = {2018},
+    isbn = {9781450360067},
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://doi.org/10.1145/3265723.3265735},
+    doi = {10.1145/3265723.3265735},
+    abstract = {Java runtime frees applications from manual memory management by its automatic garbage collection (GC), at the cost of stop-the-world pauses. State-of-the-art collectors leverage multiple generations, which will inevitably suffer from a full GC phase scanning the whole heap and induce a pause tens of times longer than normal collections, which largely affects both throughput and latency of the entire system. In this paper, we analyze the full GC performance of HotSpot Parallel Scavenge garbage collector comprehensively and study its algorithm design in depth. We find out that heavy dependencies among heap regions cause poor thread utilization. Furthermore, many heap regions contain mostly live objects (referred to as dense regions), which are unnecessary to collect. To solve these problems, we introduce two kinds of optimizations: allocating shadow regions dynamically as compaction destination to eliminate region dependencies and skipping dense regions to reduce GC workload. Evaluation results show the optimizations lead to averagely 2.6X (up to 4.5X) improvement in full GC throughput and thereby boost the application performance by 18.2\% on average (58.4\% at best).},
+    booktitle = {Proceedings of the 9th Asia-Pacific Workshop on Systems},
+    articleno = {18},
+    numpages = {7},
+    keywords = {Memory management, Parallel Scavenge, Full garbage collection, Performance, Java virtual machine},
+    location = {Jeju Island, Republic of Korea},
+    series = {APSys '18}
+}
+
+@inproceedings{java_gc_comparison_2019,
+  author={Pufek, P. and Grgić, H. and Mihaljević, B.},
+  booktitle={2019 42nd International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO)}, 
+  title={Analysis of Garbage Collection Algorithms and Memory Management in Java}, 
+  year={2019},
+  volume={},
+  number={},
+  pages={1677-1682},
+  doi={10.23919/MIPRO.2019.8756844}
+}
+
+// Provided paper
+@inproceedings{garbage_first_gc_2004,
+  doi = {10.1145/1029873.1029879},
+  url = {https://doi.org/10.1145/1029873.1029879},
+  year = {2004},
+  month = oct,
+  publisher = {{ACM}},
+  author = {David Detlefs and Christine Flood and Steve Heller and Tony Printezis},
+  title = {Garbage-first garbage collection},
+  booktitle = {Proceedings of the 4th international symposium on Memory management}
+}
+
