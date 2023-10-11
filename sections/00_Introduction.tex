@@ -1,7 +1,58 @@
 \section{Introduction}
 
-Garbage collection describes the process of automatically allocating and
-deallocating memory a process requires. \cite{python_gcdesign_2023} This is
-commonly performed by the runtime the compiler embeds into the resulting
-executabe or the runtime the interpreter provides to the program it currently
-executes. \cite{go_gcguide_2022, python_gclib_2023}
+Garbage collection refers to the process of automatically managing
+heap allocated memory on behalf of the running process by
+identifying parts of memory that are no longer needed. \cite[Introduction]{go_gcguide_2022}
+This is often performed by the runtime of a programming language while the
+program is executing. \cite[Introduction]{go_spec_2023}
+
+Most programming languages allocate values with static lifetimes
+\footnote{variable available for the whole runtime of the
+program \cite[Abstract]{static-dynamic-scope_tanter_2009}} in main memory along
+with the executable code or values which are alive for a certain scope using
+the call stack \footnote{stores information about running
+subroutines / functions \cite[2.2 Call Stacks]{call-stack_mcmaster-memon_2006}}
+without requiring dynamic allocation. Variables that are alive for a certain
+scope can not escape the call stack, thus can't escape the scope they were
+defined in and must be dynamically allocated if accessing them outside of their
+scope is desired. This requires the programmer to allocate and deallocate these
+variables to prevent memory leaks\footnote{allocated no longer needed
+memory not deallocated \cite[1.2.1 A Practical Object Ownership
+Model]{practical_heine-lam_2003}} provided the programming language does not
+perform garbage collection. 
+
+\begin{listing}[H] \begin{minted}{c} 
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct { char *name; double age; } Person;
+
+Person *new_person(char *name, double age) {
+  Person *p = NULL;
+  if (p = malloc(sizeof(Person)), p == NULL) {
+    fputs("failed to allocate person", stderr);
+    return NULL;
+  }
+  p->age = age, p->name = name;
+  return p;
+}
+
+void destroy_person(Person *p) {
+  free(p);
+  p = NULL;
+}
+
+int main(void) {
+  Person *p = new_person("max", 25);
+  if (p == NULL) {
+    return EXIT_FAILURE;
+  }
+  printf("Person{name: \"%s\", age: %f}\n", p->name, p->age);
+  destroy_person(p);
+  return EXIT_SUCCESS;
+}
+    \end{minted}
+    \caption{C heap allocation example}
+    \label{code:c_heap_alloc_example}
+\end{listing}
+

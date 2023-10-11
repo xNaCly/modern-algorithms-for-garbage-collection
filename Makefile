@@ -4,11 +4,12 @@ biber: main
 	biber main
 
 main:
-	pdflatex main
+	pdflatex -shell-escape main
 
 clean:
 	rm -fr \
 		*.toc \
+		**/**.aux \
 		*.aux \
 		*.nav \
 		*.out \
