@@ -24,6 +24,8 @@ perform garbage collection.
 
 \begin{listing}[H] 
     \begin{minted}{c} 
+#include <stdio.h>
+#include <stdlib.h>
 typedef struct { 
     char *name;
     double age; 
@@ -34,8 +36,9 @@ Person *new_person(char *name, double age) {
   p->age = age, p->name = name;
   return p;
 }
+// [...]
     \end{minted}
-    \caption{C heap allocation example}
+    \caption{C heap allocation}
     \label{code:c_heap_alloc_example}
 \end{listing}
 
@@ -48,8 +51,138 @@ and use a \texttt{Person} structure outside of its scope, the structure has to
 be dynamically allocated via the \texttt{malloc} function defined in the
 \mintinline{c}{#include <stdlib.h>} header.
 
-% TODO: showcase free and issues occurring:
-% - use after free
-% - memory leak
-% cite OWASP
-% Show example with go, escape to heap showcase
+\begin{listing}[H] 
+    \begin{minted}{c} 
+// [...]
+int main(void) {
+    for(int i = 0; i < 1e5; i++) {
+        Person *p = new_person("max musterman", 89);
+    }
+    return EXIT_SUCCESS;
+}
+    \end{minted}
+    \caption{C heap allocation with memory leakage}
+    \label{code:c_heap_memory_leak_example}
+\end{listing}
+
+See listing \autoref{code:c_heap_memory_leak_example} for an example of a
+memory leak. Here the program creates $1*10^5$ \texttt{Person} structures
+using the \texttt{new\_person} function allocating each one on the heap but
+not releasing their memory after the iteration ends and therefore rendering
+the reference to them inaccessible, which generally defines a memory leakage
+this programming error can lead to abnormal system behaviour and excessive RAM
+consumption in long lived applications
+\cite[Description]{owasp-memoryleak_unknown_unknown}. The definitive solution
+for memory leaks is determining leaking variables and freeing them, see
+listing \autoref{code:c_heap_memory_leak_example_fixed}.
+
+\begin{listing}[H] 
+    \begin{minted}{c} 
+// [...]
+int main(void) {
+    for(int i = 0; i < 1e5; i++) {
+        Person *p = new_person("max musterman", 89);
+        free(p);
+    }
+    return EXIT_SUCCESS;
+}
+    \end{minted}
+    \caption{C heap allocation without memory leakage}
+    \label{code:c_heap_memory_leak_example_fixed}
+\end{listing}
+
+Another potential issue with manual memory management is accessing already
+released memory classified as \textit{use-after-free} errors
+\cite{owasp-use-after-free_unkown_unknown}. Consider the modified example in
+listing \autoref{code:c_heap_memory_use_after_free_example} showcasing value
+access of a \texttt{Person} structure after its memory has already been
+released.
+
+\begin{listing}[H] 
+    \begin{minted}{c} 
+// [...]
+int main(void) {
+    for(int i = 0; i < 1e5; i++) {
+        Person *p = new_person("max musterman", 89);
+        free(p);
+        printf("Person{name: '%s', age: %f}\n", p->name, p->age);
+    }
+    return EXIT_SUCCESS;
+}
+    \end{minted}
+    \caption{C heap allocation with freed memory access}
+    \label{code:c_heap_memory_use_after_free_example}
+\end{listing}
+
+The example in listing \autoref{code:c_heap_memory_use_after_free_example}
+results in undefined behaviour
+\cite[Description]{owasp-use-after-free_unkown_unknown} and could cause
+crashes if memory the program can not legally access is accessed, could cause
+memory corruption if the memory region pointed to contains data after the
+previous data has been released or could be exploited to inject data into the
+application \cite[Consequences]{owasp-use-after-free_unkown_unknown}.
+
+\begin{listing}[H] 
+    \begin{minted}{c} 
+// [...]
+void *free_person(Person *p) {
+  free(p);
+  return NULL;
+}
+
+int main(void) {
+    for(int i = 0; i < 1e5; i++) {
+        Person *p = new_person("max musterman", 89);
+        p = free_person(p);
+        if(p == NULL) continue;
+        printf("Person{name: '%s', age: %f}\n", p->name, p->age);
+    }
+    return EXIT_SUCCESS;
+}
+    \end{minted}
+    \caption{C heap allocation without freed memory access}
+    \label{code:c_heap_memory_use_after_free_example_fixed}
+\end{listing}
+
+A common resolution for this issue is setting a pointer to \texttt{NULL} via
+\mintinline{c}{p = NULL} and checking if the pointer is \texttt{NULL} before
+accessing it (see listing
+\autoref{code:c_heap_memory_use_after_free_example_fixed}) \cite[Related
+Controls]{owasp-use-after-free_unkown_unknown}. 
+
+Garbage collection manages dynamically allocated memory for the programmer,
+therefore issues such as memory leakages and accessing released memory can be
+prevented by not exposing capabilities for manual memory management. A
+language such as golang contains a garbage collector
+\cite[Introduction]{go_spec_2023} enabling autoamtically releasing no longer
+used memory blocks, as shown in listing \autoref{code:go_heap_alloc_example}.
+
+\begin{listing}[H] 
+    \begin{minted}{go} 
+package main
+
+import "fmt"
+
+type Person struct {
+    Name string
+    Age  float64
+}
+
+func new_person(name string, age float64) *Person {
+    return &Person{name, age}
+}
+
+func main() {
+    for i := 0; i < 1e5; i++ {
+        p := new_person("max musterman", 89)
+        fmt.Printf("Person{name: %q, age: %f}\n", p.Name, p.Age)
+    }
+}
+    \end{minted}
+    \caption{Go allocation example}
+    \label{code:go_heap_alloc_example}
+\end{listing}
+
+The garbage collector in listing \autoref{code:go_heap_alloc_example}
+automatically deallocates the result of \texttt{new\_person} upon it leaving
+the scope of the loop iteration it was called in.
