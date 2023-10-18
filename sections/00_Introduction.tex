@@ -1,10 +1,10 @@
 \section{Introduction}
 
-Garbage collection refers to the process of automatically managing
-heap allocated memory on behalf of the running process by
-identifying parts of memory that are no longer needed. \cite[Introduction]{go_gcguide_2022}
-This is often performed by the runtime of a programming language while the
-program is executing. \cite[Introduction]{go_spec_2023}
+Garbage collection refers to the process of automatically managing heap
+allocated memory on behalf of the running process by identifying parts of
+memory that are no longer needed. This is often performed by the runtime of a
+programming language while the program is executing.
+\cite[Introduction]{go_gcguide_2022} \cite[Introduction]{go_spec_2023} 
 
 Most programming languages allocate values with static
 lifetimes\footnote{variable available for the whole runtime of the program
@@ -152,10 +152,13 @@ Controls]{owasp-use-after-free_unkown_unknown}.
 
 Garbage collection manages dynamically allocated memory for the programmer,
 therefore issues such as memory leakages and accessing released memory can be
-prevented by not exposing capabilities for manual memory management. A language
-such as golang contains a garbage collector \cite[Introduction]{go_spec_2023}
-enabling automatically releasing no longer used memory blocks, as shown in
-listing \autoref{code:go_heap_alloc_example}.
+prevented by not exposing capabilities for manual memory management. A
+language such as golang contains a garbage collector
+\cite[Introduction]{go_spec_2023} enabling automatically releasing no longer
+used memory blocks, as shown in listing \autoref{code:go_heap_alloc_example}.
+The garbage collector in listing \autoref{code:go_heap_alloc_example}
+automatically deallocates the result of \texttt{new\_person} upon it leaving
+the scope of the loop iteration it was called in.
 
 \begin{listing}[H] 
     \begin{minted}{go} 
@@ -182,7 +185,3 @@ func main() {
     \caption{Go allocation example}
     \label{code:go_heap_alloc_example}
 \end{listing}
-
-The garbage collector in listing \autoref{code:go_heap_alloc_example}
-automatically deallocates the result of \texttt{new\_person} upon it leaving
-the scope of the loop iteration it was called in.
