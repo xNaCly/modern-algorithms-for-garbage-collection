@@ -19,12 +19,6 @@ jobs:
       - name: Copy PDF
         run: mkdir publish && cp main.pdf publish/Seminararbeit.pdf
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: pdf
-          path: publish
-
       - name: Get tag for Release
         if: startsWith(github.ref, 'refs/tags/v')
         id: get_version
@@ -41,3 +35,19 @@ jobs:
           tag_name: ${{ steps.get_version.outputs.VERSION }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout PDF branch
+        uses: actions/checkout@v2
+        with:
+          ref: pdf
+          fetch-depth: 0
+          path: pdfs
+
+      - name: Copy PDF
+        run: cp main.pdf pdfs/${GITHUB_REF#refs/heads/}.pdf
+
+      - name: Commit and Push PDF
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update PDF for ${{ github.ref }}
+          repository: ./pdfs
