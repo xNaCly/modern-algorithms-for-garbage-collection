@@ -1,2 +1,36 @@
-\section{Overview over Garbage Collection}
+\section{Garbage Collection}
 
+As introduced before (see \autoref{sec:introduction}) the process of garbage
+collection is required by many programming languages via their specification,
+as is the case with \textit{Java} \cite[Chapter 1.
+Introduction]{java_language_spec_2023} and \textit{Go}
+\cite[Introduction]{go_spec_2023}. The \textit{Go} programming language
+specification however does not include specifics around the implementation of
+its garbage collection \cite[Introduction]{go_gcguide_2022}. The \textit{Go}
+standard tool chain provides a runtime library included in all executables
+created by the \textit{Go} compiler. This library contains the garbage
+collector \cite[Introduction]{go_gcguide_2022}.
+
+% TODO: cite
+Garbage collection as a whole is an umbrella term for
+different concepts, algorithms and ideas. This chapter includes the
+differentiation between these and thereby introduces terms necessary for
+understanding the following chapters. 
+
+\subsection{Scope}
+
+The scope of garbage collection refers to the variables, resources and memory
+areas it is used to manage. 
+
+% TODO: cite
+Garbage collection is generally responsible for managing already by the
+programmer or the libraries / subroutines the programmer uses allocated memory.
+The aforementioned can be cumulated as heap allocated memory or dynamically
+allocated memory and represents the purview of a garbage collector.
+
+The areas not managed by the garbage collector and thus not in the scope of
+this paper are open resources requiring being closed by the consumer (such as
+sockets or \texttt{java.util.Scanner} \cite[close]{java-util-scanner}) and
+stack allocated variables as well as statically allocated variables.
+
+\subsection{Strategies}
