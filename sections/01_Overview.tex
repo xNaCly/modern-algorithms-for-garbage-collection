@@ -23,12 +23,46 @@ areas it manages. Garbage collection is generally responsible for managing
 already allocated memory, either by the programmer or the libraries /
 subroutines the programmer uses \cite[Abstract]{learned-gc_2020}. The
 aforementioned can be cumulated as heap allocated memory or dynamically
-allocated memory therefore represents the purview of a garbage collector
-\cite[1 Introduction]{age-based-gc_1999}.
+allocated memory. This represents the purview of a garbage collector \cite[1
+Introduction]{age-based-gc_1999}. The listing \autoref{code:java_gc_variables}
+showcases variables that will be garbage collected upon the scope of the
+\texttt{GarbageCollected.main()} function ends.
+
+\begin{listing}[H] 
+    \begin{minted}{java} 
+class GarbageCollected {
+    public static void main(String[] args) {
+        var test1 = new Test();
+        var test2 = new Test();
+    }
+    public Test() {}
+}
+    \end{minted}
+    \caption{Java variables managed by the garbage collector}
+    \label{code:java_gc_variables}
+\end{listing}
 
 The areas not managed by the garbage collector and thus not in the scope of
 this paper are open resources requiring being closed by the consumer (such as
 sockets or \texttt{java.util.Scanner} \cite[close]{java-util-scanner}) and
-stack allocated variables as well as statically allocated variables.
+stack allocated variables as well as statically allocated variables. The
+listing \autoref{code:java_non_gc_variables} displays a variety of variables
+not garbage collected due to all of them being stack allocated primitive types
+\cite[4.2. Primitive Types and Values]{java_language_spec_2023}.
+
+\begin{listing}[H] 
+    \begin{minted}{java} 
+class NotGarbageCollected {
+    static int integer = 5;
+    public static void main(String[] args) {
+        byte newline = 0x1A;
+        double pi = 3.1415;
+        char a = 'a';
+    }
+}
+    \end{minted}
+    \caption{Java variables not managed by the garbage collector}
+    \label{code:java_non_gc_variables}
+\end{listing}
 
 \subsection{Strategies}
