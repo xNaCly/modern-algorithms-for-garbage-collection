@@ -11,7 +11,6 @@ standard tool chain provides a runtime library included in all executables
 created by the \textit{Go} compiler. This library contains the garbage
 collector \cite[Introduction]{go_gcguide_2022}.
 
-% TODO: cite
 Garbage collection as a whole is an umbrella term for
 different concepts, algorithms and ideas. This chapter includes the
 differentiation between these and thereby introduces terms necessary for
@@ -20,13 +19,12 @@ understanding the following chapters.
 \subsection{Scope}
 
 The scope of garbage collection refers to the variables, resources and memory
-areas it is used to manage. 
-
-% TODO: cite
-Garbage collection is generally responsible for managing already by the
-programmer or the libraries / subroutines the programmer uses allocated memory.
-The aforementioned can be cumulated as heap allocated memory or dynamically
-allocated memory and represents the purview of a garbage collector.
+areas it manages. Garbage collection is generally responsible for managing
+already allocated memory, either by the programmer or the libraries /
+subroutines the programmer uses \cite[Abstract]{learned-gc_2020}. The
+aforementioned can be cumulated as heap allocated memory or dynamically
+allocated memory therefore represents the purview of a garbage collector
+\cite[1 Introduction]{age-based-gc_1999}.
 
 The areas not managed by the garbage collector and thus not in the scope of
 this paper are open resources requiring being closed by the consumer (such as
