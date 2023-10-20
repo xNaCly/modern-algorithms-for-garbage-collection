@@ -1,6 +1,10 @@
-\documentclass[12pt, a4paper]{article}
-\usepackage{mathptmx} % times new roman
+\documentclass[12pt, a4paper]{scrreport}
+
+% Font: Helvetica
 \usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
 \usepackage[
     backend=biber,
     sorting=none,
@@ -12,10 +16,11 @@
 \addbibresource{sources.bib}
 \usepackage[margin=2.5cm, foot=1cm]{geometry}
 \usepackage[hidelinks=false]{hyperref}
-\usepackage{minted}
+\usepackage[chapter]{minted}
 \usepackage{float}
 
 \setlength{\parindent}{0cm}
 \renewcommand{\sectionautorefname}{Section}
 \renewcommand{\subsectionautorefname}{Section}
 \renewcommand{\subsubsectionautorefname}{Section}
+
