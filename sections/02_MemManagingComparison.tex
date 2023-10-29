@@ -4,3 +4,17 @@
 
 \section{Lifetimes and Borrow Checking}
 
+The desire for the performance of manual memory management and the safety of garbage collection has led to the development
+of a new memory management technique called \textit{lifetimes and borrow checking}.
+The main idea behind this technique is that the corresponding \texttt{free} calls for heap memory can be automatically inserted
+at compile time by the compiler, if the compiler can prove that the memory is no longer needed.
+When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
+
+This memory management technique was first introduced in the Rust programming language \cite[1. Introduction]{rust_borrow_formalism_2021}.
+Because Rust was the first language to implement this concept, the examples in this section will be written in Rust.
+
+\subsubsection{Ownership}
+
+\subsubsection{Borrowing}
+
+\subsubsection{Long-lived variables using reference counters}
