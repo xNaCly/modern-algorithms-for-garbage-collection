@@ -35,7 +35,8 @@ can be found in Listing \autoref{code:rust_ownership_person_example}.
     the example still requires the used heap memory to be freed.
     References/Borrows to temporary values are not allowed in Rust so
     the only way to force a heap allocation of the whole struct would
-    be to use a \texttt{std::boxed::Box<T>}.
+    be to use a \texttt{std::boxed::Box<T>}. This was not used in this
+    example for legibility reasons.
 }
 
 \begin{listing}[H] 
