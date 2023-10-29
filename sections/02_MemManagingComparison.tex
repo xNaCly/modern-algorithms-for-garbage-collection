@@ -15,6 +15,60 @@ Because Rust was the first language to implement this concept, the examples in t
 
 \subsubsection{Ownership}
 
+The first step to understand this technique is to understand the concept of \textit{ownership}.
+
+In Rust, every value is always owned by exactly a variable inside a scope.
+When the variable goes out of scope, the value is dropped.
+The ownership of a value can be transferred to another variable by \textit{moving} it.
+This can be either in the form of an assignment or as a function return value.
+When a value is moved, the previous owner can no longer access the value.
+When a value is dropped by going out of scope, any memory it owns is freed, including heap memory \cite[59-61]{rust_book_2019}.
+
+A example showcasing the ownership concept similar\footnotemark to the C example presented in the introduction
+can be found in Listing \autoref{code:rust_ownership_person_example}.
+\footnotetext{
+    The presented Rust example differs from the C example because the
+    \texttt{create\_person} function does not return a reference but a value.
+    However the struct consists of a \texttt{String} which is a heap allocated
+    dynamic length string that gets allocated by the \texttt{.into()} call
+    converting the static \texttt{\&str} into \texttt{String}, so 
+    the example still requires the used heap memory to be freed.
+    References/Borrows to temporary values are not allowed in Rust so
+    the only way to force a heap allocation of the whole struct would
+    be to use a \texttt{std::boxed::Box<T>}.
+}
+
+\begin{listing}[H] 
+    \begin{minted}{rust}
+struct Person {
+    name: String,
+    age: f64,
+}
+
+fn new_person(name: String, age: f64) -> Person {
+    Person { name, age }
+}
+
+fn print_person(person: Person) {
+    println!("{} is {} years old.", person.name, person.age);
+}
+
+fn main() {
+    let person = new_person("Rainer Zufall".into(), 42.0);
+    let person1 = person; // value of person is moved to person1
+    // print_person(person); // error: use of moved value: `person`
+    print_person(person1);
+
+    { // Example of sub-scope
+        let person2 = new_person("Jona Zufall".into(), 13.0);
+        print_person(person2);
+    } // person2 is dropped here
+} // person is dropped here
+    \end{minted}
+    \caption{Person struct example in Rust demonstrating ownership}
+    \label{code:rust_ownership_person_example}
+\end{listing}
+
 \subsubsection{Borrowing}
 
-\subsubsection{Long-lived variables using reference counters}
+\subsubsection{Multi-owner values using reference counters}
