@@ -79,26 +79,55 @@ collection. This strategy of automatically managing memory is a common way of
 implementing garbage collection.
 
 % TODO: cite
-Tracing is defined as firstly determining which objects should be deallocated.
-By tracing which of the currently allocated objects are accessible via linked
-references, objects that are accessible are marked as alive.
+Tracing is defined as determining which objects should be deallocated. This is
+done by tracing which of the currently allocated objects are accessible via
+linked references. Accessible objects are marked as alive.
 
-Memory regions not accessible via this list are not marked and are therefore
+Memory regions not accessible via this list are not marked and therefore
 considered to be unused memory and are deallocated.
 
 \subsubsection{Categorizing memory}
 
 % TODO: cite
 Objects are categorised as reachable or alive if they are referenced by at
-least one variable in the currently running program. This includes references
-from other reachable objects. As introduced before, the definition of tracing
-garbage collection includes determining whether or not objects are reachable.
-In the paragraph above, this reachability is defined. This definition does not
-include the objects the tracing garbage collector refers to as
-\textit{root}-objects. root-objects are defined as generally accessible, such
-as local variables, parameters and global variables.\footnote{As introduced in
-\autoref{sec:scope}: variables on the call stack or static variables}
-Root-objects are used as a starting point for tracing allocated objects.
+least one variable in the currently running program, see
+\autoref{code:java_memory_categories_example} for a visualisation. This includes
+references from other reachable objects. As introduced before, the definition
+of tracing garbage collection includes determining whether or not objects are
+reachable. In the paragraph above, this reachability is defined. This
+definition does not include the objects the tracing garbage collector refers to
+as \textit{root}-objects. root-objects are defined as generally accessible,
+such as local variables, parameters and global variables.\footnote{As
+introduced in \autoref{sec:scope}: variables on the call stack or static
+variables} Root-objects are used as a starting point for tracing allocated
+objects.
+
+\begin{listing}[H] 
+    \begin{minted}{Java} 
+public class Main {
+    public static void main(String[] args) {
+        var x = new Object();
+        x = new Object();
+        var y = new Object();
+        y = new Object();
+        Main.f();
+    }
+
+    private static void f() {
+        var z = new Object();
+    }
+}
+    \end{minted}
+    \caption{Java example for accessible and inaccessible memory}
+    \label{code:java_memory_categories_example}
+\end{listing}
+
+In \autoref{code:java_memory_categories_example}, both initially to \texttt{x}
+and \texttt{y} assigned values in the \texttt{Main.main} function are
+considered inaccessible due to the reassignment in the following lines. The
+value of the variable \texttt{z} in the \texttt{Main.f} function is considered
+inaccessible once the scope of the function ends, thus the variable \texttt{z}
+is dropped from the call stack - rendering its value inaccessible. 
 
 
 \subsubsection{Implementations}
