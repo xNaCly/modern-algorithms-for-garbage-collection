@@ -1,58 +1,58 @@
 // Go
-@online{go_gcguide_2022, 
-    title = {A Guide to the Go Garbage Collector},
-    url = {https://tip.golang.org/doc/gc-guide},
-    urldate = {2023-10-09},
-    year = {2022}
-}
+    @online{go_gcguide_2022, 
+        title = {A Guide to the Go Garbage Collector},
+        url = {https://tip.golang.org/doc/gc-guide},
+        urldate = {2023-10-09},
+        year = {2022}
+    }
 
-@online{go_spec_2023, 
-    title = {The Go Programming Language Specification},
-    url = {https://tip.golang.org/ref/spec},
-    urldate = {2023-10-11},
-    year = {2023}
-}
+    @online{go_spec_2023, 
+        title = {The Go Programming Language Specification},
+        url = {https://tip.golang.org/ref/spec},
+        urldate = {2023-10-11},
+        year = {2023}
+    }
 
-@online{go_gckeynote_2018, 
-    title = {Getting to Go: The Journey of Go's Garbage Collector},
-    url = {https://go.dev/blog/ismmkeynote},
-    urldate = {2023-10-09},
-    year = {2018}
-}
+    @online{go_gckeynote_2018, 
+        title = {Getting to Go: The Journey of Go's Garbage Collector},
+        url = {https://go.dev/blog/ismmkeynote},
+        urldate = {2023-10-09},
+        year = {2018}
+    }
 
 // gc 
 
-// learned gc
-@inproceedings{learned-gc_2020,
-  title={Learned garbage collection},
-  author={Cen, Lujing and Marcus, Ryan and Mao, Hongzi and Gottschlich, Justin and Alizadeh, Mohammad and Kraska, Tim},
-  booktitle={Proceedings of the 4th ACM SIGPLAN International Workshop on Machine Learning and Programming Languages},
-  pages={38--44},
-  year={2020}
-}
+    // learned gc
+    @inproceedings{learned-gc_2020,
+      title={Learned garbage collection},
+      author={Cen, Lujing and Marcus, Ryan and Mao, Hongzi and Gottschlich, Justin and Alizadeh, Mohammad and Kraska, Tim},
+      booktitle={Proceedings of the 4th ACM SIGPLAN International Workshop on Machine Learning and Programming Languages},
+      pages={38--44},
+      year={2020}
+    }
 
-// gc performance
-@article{gc-performance_2004,
-  title={Myths and realities: The performance impact of garbage collection},
-  url={https://users.cecs.anu.edu.au/~steveb/pubs/papers/mmtk-sigmetrics-2004.pdf},
-  author={Blackburn, Stephen M and Cheng, Perry and McKinley, Kathryn S},
-  journal={ACM SIGMETRICS Performance Evaluation Review},
-  volume={32},
-  number={1},
-  pages={25--36},
-  year={2004},
-  publisher={ACM New York, NY, USA}
-}
+    // gc performance
+    @article{gc-performance_2004,
+      title={Myths and realities: The performance impact of garbage collection},
+      url={https://users.cecs.anu.edu.au/~steveb/pubs/papers/mmtk-sigmetrics-2004.pdf},
+      author={Blackburn, Stephen M and Cheng, Perry and McKinley, Kathryn S},
+      journal={ACM SIGMETRICS Performance Evaluation Review},
+      volume={32},
+      number={1},
+      pages={25--36},
+      year={2004},
+      publisher={ACM New York, NY, USA}
+    }
 
-// age based / generational gc 
-@inproceedings{age-based-gc_1999,
-  title={Age-based garbage collection},
-  url={https://dl.acm.org/doi/pdf/10.1145/320384.320425},
-  author={Stefanovi{\'c}, Darko and McKinley, Kathryn S and Moss, J Eliot B},
-  booktitle={Proceedings of the 14th ACM SIGPLAN conference on Object-oriented Programming, Systems, Languages, and Applications},
-  pages={370--381},
-  year={1999}
-}
+    // age based / generational gc 
+    @inproceedings{age-based-gc_1999,
+      title={Age-based garbage collection},
+      url={https://dl.acm.org/doi/pdf/10.1145/320384.320425},
+      author={Stefanovi{\'c}, Darko and McKinley, Kathryn S and Moss, J Eliot B},
+      booktitle={Proceedings of the 14th ACM SIGPLAN conference on Object-oriented Programming, Systems, Languages, and Applications},
+      pages={370--381},
+      year={1999}
+    }
 
 // ocaml
 @online{ocmal_gc_unknown, 
@@ -63,63 +63,63 @@
 }
 
 // Python
-@online{python_gclib_2023, 
-    title = {gc - Garbage Collector interface},
-    url = {https://docs.python.org/3.13/library/gc.html},
-    urldate = {2023-10-09},
-    year = {2023}
-}
+    @online{python_gclib_2023, 
+        title = {gc - Garbage Collector interface},
+        url = {https://docs.python.org/3.13/library/gc.html},
+        urldate = {2023-10-09},
+        year = {2023}
+    }
 
-@online{python_gcdesign_2023, 
-    title = {Garbage collector design},
-    url = {https://devguide.python.org/internals/garbage-collector/index.html},
-    urldate = {2023-10-09},
-    year = {2023}
-}
+    @online{python_gcdesign_2023, 
+        title = {Garbage collector design},
+        url = {https://devguide.python.org/internals/garbage-collector/index.html},
+        urldate = {2023-10-09},
+        year = {2023}
+    }
 
 // Java
-@inproceedings{java_gc_full_analysis_2018,
-    author = {Li, Haoyu and Wu, Mingyu and Chen, Haibo},
-    title = {Analysis and Optimizations of Java Full Garbage Collection},
-    year = {2018},
-    isbn = {9781450360067},
-    publisher = {Association for Computing Machinery},
-    address = {New York, NY, USA},
-    url = {https://doi.org/10.1145/3265723.3265735},
-    doi = {10.1145/3265723.3265735},
-    abstract = {Java runtime frees applications from manual memory management by its automatic garbage collection (GC), at the cost of stop-the-world pauses. State-of-the-art collectors leverage multiple generations, which will inevitably suffer from a full GC phase scanning the whole heap and induce a pause tens of times longer than normal collections, which largely affects both throughput and latency of the entire system. In this paper, we analyze the full GC performance of HotSpot Parallel Scavenge garbage collector comprehensively and study its algorithm design in depth. We find out that heavy dependencies among heap regions cause poor thread utilization. Furthermore, many heap regions contain mostly live objects (referred to as dense regions), which are unnecessary to collect. To solve these problems, we introduce two kinds of optimizations: allocating shadow regions dynamically as compaction destination to eliminate region dependencies and skipping dense regions to reduce GC workload. Evaluation results show the optimizations lead to averagely 2.6X (up to 4.5X) improvement in full GC throughput and thereby boost the application performance by 18.2\% on average (58.4\% at best).},
-    booktitle = {Proceedings of the 9th Asia-Pacific Workshop on Systems},
-    articleno = {18},
-    numpages = {7},
-    keywords = {Memory management, Parallel Scavenge, Full garbage collection, Performance, Java virtual machine},
-    location = {Jeju Island, Republic of Korea},
-    series = {APSys '18}
-}
+    @inproceedings{java_gc_full_analysis_2018,
+        author = {Li, Haoyu and Wu, Mingyu and Chen, Haibo},
+        title = {Analysis and Optimizations of Java Full Garbage Collection},
+        year = {2018},
+        isbn = {9781450360067},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        url = {https://doi.org/10.1145/3265723.3265735},
+        doi = {10.1145/3265723.3265735},
+        abstract = {Java runtime frees applications from manual memory management by its automatic garbage collection (GC), at the cost of stop-the-world pauses. State-of-the-art collectors leverage multiple generations, which will inevitably suffer from a full GC phase scanning the whole heap and induce a pause tens of times longer than normal collections, which largely affects both throughput and latency of the entire system. In this paper, we analyze the full GC performance of HotSpot Parallel Scavenge garbage collector comprehensively and study its algorithm design in depth. We find out that heavy dependencies among heap regions cause poor thread utilization. Furthermore, many heap regions contain mostly live objects (referred to as dense regions), which are unnecessary to collect. To solve these problems, we introduce two kinds of optimizations: allocating shadow regions dynamically as compaction destination to eliminate region dependencies and skipping dense regions to reduce GC workload. Evaluation results show the optimizations lead to averagely 2.6X (up to 4.5X) improvement in full GC throughput and thereby boost the application performance by 18.2\% on average (58.4\% at best).},
+        booktitle = {Proceedings of the 9th Asia-Pacific Workshop on Systems},
+        articleno = {18},
+        numpages = {7},
+        keywords = {Memory management, Parallel Scavenge, Full garbage collection, Performance, Java virtual machine},
+        location = {Jeju Island, Republic of Korea},
+        series = {APSys '18}
+    }
 
-@inproceedings{java_gc_comparison_2019,
-  author={Pufek, P. and Grgić, H. and Mihaljević, B.},
-  booktitle={2019 42nd International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO)}, 
-  title={Analysis of Garbage Collection Algorithms and Memory Management in Java}, 
-  year={2019},
-  volume={},
-  number={},
-  pages={1677-1682},
-  doi={10.23919/MIPRO.2019.8756844}
-}
+    @inproceedings{java_gc_comparison_2019,
+      author={Pufek, P. and Grgić, H. and Mihaljević, B.},
+      booktitle={2019 42nd International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO)}, 
+      title={Analysis of Garbage Collection Algorithms and Memory Management in Java}, 
+      year={2019},
+      volume={},
+      number={},
+      pages={1677-1682},
+      doi={10.23919/MIPRO.2019.8756844}
+    }
 
-@online{java_language_spec_2023,
-    url={https://docs.oracle.com/javase/specs/jls/se21/html/jls-1.html},
-    title={Java Language Specification},
-    year={2023},
-    urldate={2023-10-19}
-}
+    @online{java_language_spec_2023,
+        url={https://docs.oracle.com/javase/specs/jls/se21/html/jls-1.html},
+        title={Java Language Specification},
+        year={2023},
+        urldate={2023-10-19}
+    }
 
-@online{java-util-scanner,
-    url={https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html#close--},
-    title={Class Scanner},
-    year={2006},
-    urldate={2023-10-19}
-}
+    @online{java-util-scanner,
+        url={https://docs.oracle.com/javase/8/docs/api/java/util/Scanner.html#close--},
+        title={Class Scanner},
+        year={2006},
+        urldate={2023-10-19}
+    }
 
 // Provided paper
 @inproceedings{garbage_first_gc_2004,
@@ -160,18 +160,28 @@
 
 // owasp
 
-// memory leak
-@online{owasp-memoryleak_unknown_unknown,
-    title = {Memory leak},
-    url = {https://owasp.org/www-community/vulnerabilities/Memory_leak},
-    urldate = {2023-10-12},
-    year = {2020}
-}
+    // memory leak
+    @online{owasp-memoryleak_unknown_unknown,
+        title = {Memory leak},
+        url = {https://owasp.org/www-community/vulnerabilities/Memory_leak},
+        urldate = {2023-10-12},
+        year = {2020}
+    }
 
-// use after free
-@online{owasp-use-after-free_unkown_unknown,
-    title = {Using freed memory},
-    url = {https://owasp.org/www-community/vulnerabilities/Using_freed_memory},
-    urldate = {2023-10-12},
-    year = {2020}
+    // use after free
+    @online{owasp-use-after-free_unkown_unknown,
+        title = {Using freed memory},
+        url = {https://owasp.org/www-community/vulnerabilities/Using_freed_memory},
+        urldate = {2023-10-12},
+        year = {2020}
+    }
+
+// tracing garbage collection
+@inproceedings{tracing-gc_barabash_2010,
+  title={Tracing garbage collection on highly parallel platforms},
+  author={Barabash, Katherine and Petrank, Erez},
+  url={https://web.archive.org/web/20150131070633id_/http://www.cs.technion.ac.il:80/~erez/Papers/parallel-trace-ismm.pdf},
+  booktitle={Proceedings of the 2010 International Symposium on Memory management},
+  pages={1--10},
+  year={2010}
 }
