@@ -21,6 +21,27 @@
     }
 
 // gc 
+    // multi process gc
+    @article{gc-multiprocess_1975,
+        author = {Steele, Guy L.},
+        title = {Multiprocessing Compactifying Garbage Collection},
+        year = {1975},
+        issue_date = {Sept. 1975},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        volume = {18},
+        number = {9},
+        issn = {0001-0782},
+        url = {https://doi.org/10.1145/361002.361005},
+        doi = {10.1145/361002.361005},
+        abstract = {Algorithms for a multiprocessing compactifying garbage collector are presented and discussed. The simple case of two processors, one performing LISP-like list operations and the other performing garbage collection continuously, is thoroughly examined. The necessary capabilities of each processor are defined, as well as interprocessor communication and interlocks. Complete procedures for garbage collection and for standard list processing primitives are presented and thoroughly explained. Particular attention is given to the problems of marking and relocating list cells while another processor may be operating on them. The primary aim throughout is to allow the list processor to run unimpeded while the other processor reclaims list storage The more complex case involving several list processors and one or more garbage collection processors are also briefly discussed.},
+        journal = {Commun. ACM},
+        month = {sep},
+        pages = {495–508},
+        numpages = {14},
+        keywords = {parallel processing, data structures, garbage collection, multiprocessing, relocation, compactification, storage allocation, free storage, LISP, semaphores, reclaimer, list processing, pointers, synchronization, gc processor, storage reclamation}
+    }
+
     // gc with hardware support
     @inproceedings{gc-hardware_2018,
       title={A hardware accelerator for tracing garbage collection},
