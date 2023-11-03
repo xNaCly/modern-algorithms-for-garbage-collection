@@ -9,6 +9,7 @@ of a new memory management technique called \textit{lifetimes and borrow checkin
 The main idea behind this technique is that the corresponding \texttt{free} calls for heap memory can be automatically inserted
 at compile time by the compiler, if the compiler can prove that the memory is no longer needed.
 When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
+% TODO: introduce borrow checking here shortly for context
 
 This memory management technique was first introduced in the Rust programming language \cite[1. Introduction]{rust_borrow_formalism_2021}.
 Because Rust was the first language to implement this concept, the examples in this section will be written in Rust.
@@ -24,8 +25,13 @@ This can be either in the form of an assignment or as a function return value.
 When a value is moved, the previous owner can no longer access the value.
 When a value is dropped by going out of scope, any memory it owns is freed, including heap memory \cite[59-61]{rust_book_2019}.
 
+A major contrast in Rust compared to other programming languages like C
+is that variable assignments like \texttt{let a = b} are moving the value
+instead of copying it \cite[2.2 Ownership]{rust_borrow_formalism_2021}. The same goes for the parameter values for function calls.
+Because of this variables can not be used after being used in a variable assignment or function call.
+
 A example showcasing the ownership concept similar\footnotemark to the C example presented in the introduction
-can be found in Listing \autoref{code:rust_ownership_person_example}.
+can be found in listing \autoref{code:rust_ownership_person_example}.
 \footnotetext{
     The presented Rust example differs from the C example because the
     \texttt{create\_person} function does not return a reference but a value.
@@ -64,7 +70,7 @@ fn main() {
         let person2 = new_person("Jona Zufall".into(), 13.0);
         print_person(person2);
     } // person2 is dropped here
-} // person is dropped here
+} // person1 and person are dropped here
     \end{minted}
     \caption{Person struct example in Rust demonstrating ownership}
     \label{code:rust_ownership_person_example}
@@ -72,4 +78,57 @@ fn main() {
 
 \subsubsection{Borrowing}
 
+The second step to understand this technique is to understand the concept of \textit{borrowing}.
+Allowing only one owner to access a variable at a time would be too restrictive
+for many uses cases.
+
+As a example calling the \texttt{print\_person} function twice on the same person
+would not be possible, because the ownership of the person would be moved to the
+function after the first call and cannot be accessed anymore.
+This is illustrated in listing \autoref{code:rust_person_double_print}.
+
+\begin{listing}[H] 
+    \begin{minted}{rust}
+let person = new_person("Rainer Zufall".into(), 42.0);
+print_person(person);
+print_person(person); // error: use of moved value: `person`
+    \end{minted}
+    \caption{Failed attempt to print a person twice in Rust due to lost ownership}
+    \label{code:rust_person_double_print}
+\end{listing}
+
+% TODO: citations, sources, sources everywhere
+
+The solution to this problem is the concept of borrowing.
+It essentially is the pointer concept from C and other languages but with
+the ownership model of Rust in mind, which imposes some restrictions on it.
+Borrowing allows a value owner to give another function or struct
+access to a value without giving ownership to the function.
+A owner can hand out many read-only borrows to a value at the same time,
+but only one mutable borrow at a time. This is done to avoid data races but
+is not strictly needed for the memory management aspect of the technique.
+
+A modified version of the presented person example to make use of borrows
+can be found in listing \autoref{code:rust_borrow_person_example}.
+
+\begin{listing}[H] 
+    \begin{minted}{rust}
+fn print_person(person: &Person) {
+    println!("{} is {} years old.", person.name, person.age);
+}
+
+fn main() {
+    let person = new_person("Rainer Zufall".into(), 42.0);
+    print_person(&person); // borrow using &
+    print_person(&person); // borrow a second time
+} // person is dropped here
+    \end{minted}
+    \caption{Person struct example in Rust demonstrating borrowing}
+    \label{code:rust_borrow_person_example}
+\end{listing}
+
+% TODO: explain borrow checking
+% TODO: lifetimes for functions returning values and structs
+
 \subsubsection{Multi-owner values using reference counters}
+
