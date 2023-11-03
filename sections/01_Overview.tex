@@ -175,7 +175,17 @@ collected. \cite[3 Benchmarks]{age-based-gc_1999}
 \paragraph{Stop the world}
 
 Stop the world garbage collector refer to the process of halting the execution
-of the program for running a garbage collection cycle.
+of the program for running a garbage collection cycle. Therefore guaranteeing
+that no new objects are allocated or becoming unreachable while performing the
+garbage collection cycle. The main advantage of this implementation approach is
+that it introduces less code complexity while being faster than the previously
+introduced incremental garbage collection \cite[5. The Garbage Collection
+Algorithms]{gc-multiprocess_1975}.
 
 \subsection{Reference Counting}
+% https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Reference_counting
+% https://en.wikipedia.org/wiki/Reference_counting#Garbage_collection
+
 \subsection{Escape Analysis}
+% https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Escape_analysis
+% https://en.wikipedia.org/wiki/Escape_analysis
