@@ -84,6 +84,12 @@ marked as alive. Memory regions not accessible via this list are not marked and
 therefore considered to be unused memory and are deallocated. \cite[Garbage
 Collection Background]{gc-hardware_2018}
 
+Programming languages such as \textit{Java} \cite[2.2 Full GC
+algorithm]{java_gc_comparison_2019}, \textit{Go} \cite[Tracing Garbage
+Collection]{go_gcguide_2022} and \textit{Ocaml} \cite[Garbage Collection,
+Reference Counting, and Explicit Allocation]{ocmal_gc_unknown} use this
+strategy for deallocating unused memory regions.
+
 \subsubsection{Categorizing memory}
 \label{sec:categorizing_memory}
 
@@ -183,8 +189,51 @@ introduced incremental garbage collection \cite[5. The Garbage Collection
 Algorithms]{gc-multiprocess_1975}.
 
 \subsection{Reference Counting}
-% https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Reference_counting
-% https://en.wikipedia.org/wiki/Reference_counting#Garbage_collection
+
+Reference counting garbage collection is defined as each object keeping track
+of the amount of references made to it. This reference counter is incremented
+for each created reference and decremented for each destroyed reference. Once
+the counter reaches 0 the object is no longer considered reachable and
+therefore deallocated \cite[2.2 Precise Reference
+Counting]{gc-references_2021}. \\
+
+In contrast to the previously introduced tracing garbage collection this
+approach promises that objects are immediately deallocated once their last
+reference is destroyed. Due to the reference count being attached to their
+respective objects this strategy is CPU cache friendly \cite[1.
+Introduction]{gc-references_2021}.
+
+\subsubsection{Disadvantages}
+
+Contrary to the aforementioned, reference counting garbage collection has
+several disadvantages to tracing \cite[2. Overview]{gc-references_2021}. These
+can be mitigated via sophisticated algorithms.
+
+\paragraph{Memory usage}
+Reference counting requires attaching a reference counter onto allocated
+objects, thus increasing the overall memory footprint proportionally to the
+amount of allocated objects and a reference counter for each object.
+
+\begin{align*}
+n &:= \textrm{Amount of Objects}\\
+m &:= \textrm{Object size} \\
+r &:= \textrm{Reference counter size}
+\end{align*}
+
+Memory footprint without reference counting:
+\begin{align*}
+n \cdot m 
+\end{align*}
+
+Memory footprint with reference counting:
+\begin{align*}
+(n \cdot m) + (n \cdot r)
+\end{align*}
+
+\paragraph{Cycles}
+\paragraph{Increment and Decrement Workload}
+\paragraph{Thread safety}
+\paragraph{Real-time performance}
 
 \subsection{Escape Analysis}
 % https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Escape_analysis
