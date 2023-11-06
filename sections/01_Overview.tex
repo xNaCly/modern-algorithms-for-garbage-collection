@@ -194,8 +194,9 @@ Reference counting garbage collection is defined as each object keeping track
 of the amount of references made to it. This reference counter is incremented
 for each created reference and decremented for each destroyed reference. Once
 the counter reaches 0 the object is no longer considered reachable and
-therefore deallocated \cite[2.2 Precise Reference
-Counting]{gc-references_2021}. \\
+therefore deallocated \cite[2.2 Precise Reference Counting]{gc-references_2021}
+\cite[6. Reference Counting Automatic Storage Reclamation
+Algorithms]{gc-generational-scavenging_1984}. \\
 
 In contrast to the previously introduced tracing garbage collection this
 approach promises that objects are immediately deallocated once their last
@@ -206,8 +207,10 @@ Introduction]{gc-references_2021}.
 \subsubsection{Disadvantages}
 
 Contrary to the aforementioned, reference counting garbage collection has
-several disadvantages to tracing \cite[2. Overview]{gc-references_2021}. These
-can be mitigated via sophisticated algorithms.
+several disadvantages to tracing. These
+can be mitigated via sophisticated algorithms. The following chapters highlight
+a selection of problems commonly occurring when implementing reference counting
+garbage collection \cite[2. Overview]{gc-references_2021}.
 
 \paragraph{Memory usage}
 Reference counting requires attaching a reference counter onto allocated
@@ -222,19 +225,79 @@ r &:= \textrm{Reference counter size}
 
 Memory footprint without reference counting:
 \begin{align*}
-n \cdot m 
+nm 
 \end{align*}
 
 Memory footprint with reference counting:
 \begin{align*}
-(n \cdot m) + (n \cdot r)
+nm + nr
 \end{align*}
 
 \paragraph{Cycles}
+
+Two or more objects creating references to each other is described as a
+reference cycle. This results in none of the objects being categorised as
+garbage as their collective references never let their reference count
+decrement to 0. 
+
+A way to prevent reference cycles is by extending reference counting garbage
+collection to specifically detecting cycles, as is the case in \textit{CPython}
+\cite[1.10 Reference Counts]{python-extending-gc_2008}. 
+
 \paragraph{Increment and Decrement Workload}
+
+Each reference creation and reference falling out of scope requires
+modification of the reference count of one or more objects \cite[6.1 Immediate
+Reference Counting]{gc-generational-scavenging_1984}. There are methods for
+decreasing this workload, such as ignoring stack references to objects until
+they are about to be deallocated, triggering a stack scan for making sure the
+object is no longer referenced \cite[6.2 Deferred Reference
+Couting]{gc-generational-scavenging_1984} or merging reference counter
+modifications \cite[Abstract]{gc-on-the-fly_2006}.
+
 \paragraph{Thread safety}
-\paragraph{Real-time performance}
+
+Reference counting garbage collection requires atomic operations in
+multithreaded environments to keep a consistent count of references. This
+requires expensive overhead and is often mitigated with a reference counter per
+thread. This solution introduces significant memory overhead and is not
+commonly used \cite[1.2 Reference-Counting on a
+Multiprocessor]{gc-on-the-fly_2006}.
 
 \subsection{Escape Analysis}
-% https://en.wikipedia.org/wiki/Garbage_collection_%28computer_science%29#Escape_analysis
-% https://en.wikipedia.org/wiki/Escape_analysis
+
+The term \textit{escape analysis} describes a compile-time technique for
+determining where to store an object, either on the heap or the stack. At a
+high-level the analysis determines whether an allocated object is reachable
+outside of its current scope. If so the object is said to \textit{escape} to
+the heap. Otherwise the object is allocated on the stack and as previously
+introduced deallocated/dropped once the scope ends.
+\cite[\texttt{l.18}]{go-escape}. Due to the omitted cost of managing the short
+lived allocated objects not used outside of their scope, the workload of the
+garbage collector is reduced significantly \cite[Escape
+analysis]{go_gcguide_2022}.
+
+
+\begin{listing}[H] 
+    \begin{minted}{Go} 
+type T struct { x int64 }
+
+func A() *T {
+    return &T{x:12}
+}
+
+func B() {
+    t := &T{x:25}; t.x++
+}
+    \end{minted}
+    \caption{Go example for escape analysis}
+    \label{code:go_escape_analysis}
+\end{listing}
+
+In \autoref{code:go_escape_analysis} the allocated structure of type
+\texttt{*T} in function \texttt{A} escapes to the heap due to the fact that it
+is returned from \texttt{A}. The structure assigned to \texttt{t} of type
+\texttt{*T} in \texttt{B} is dropped upon the \mintinline{go}{t.x++}
+instruction is executed and the scope of \texttt{B} ends. The Go compiler
+allocates the value of \texttt{t} on the stack - a direct result of escape
+analysis \cite{go-escape}.
