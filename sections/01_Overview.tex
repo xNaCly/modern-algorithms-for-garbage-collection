@@ -183,10 +183,12 @@ collected. \cite[3 Benchmarks]{age-based-gc_1999}
 Stop the world garbage collector refer to the process of halting the execution
 of the program for running a garbage collection cycle. Therefore guaranteeing
 that no new objects are allocated or becoming unreachable while performing the
-garbage collection cycle. The main advantage of this implementation approach is
-that it introduces less code complexity while being faster than the previously
-introduced incremental garbage collection \cite[5. The Garbage Collection
-Algorithms]{gc-multiprocess_1975}.
+garbage collection cycle. The main advantage of this implementation approach
+is that it introduces less code complexity while being faster than the
+previously introduced incremental garbage collection \cite[5. The Garbage
+Collection Algorithms]{gc-multiprocess_1975}. This technique is inherently
+unsuited for applications requiring real-time performance, such as games or
+web servers in which unexpected latency has drastic results.
 
 \subsection{Reference Counting}
 
@@ -204,15 +206,13 @@ reference is destroyed. Due to the reference count being attached to their
 respective objects this strategy is CPU cache friendly \cite[1.
 Introduction]{gc-references_2021}.
 
-\subsubsection{Disadvantages}
+Reference counting garbage collection has several disadvantages to the
+aforementioned tracing garbage collection. These can be mitigated via
+sophisticated algorithms. The following chapters highlight a selection of
+problems commonly occurring when implementing reference counting garbage
+collection \cite[2. Overview]{gc-references_2021}.
 
-Contrary to the aforementioned, reference counting garbage collection has
-several disadvantages to tracing. These
-can be mitigated via sophisticated algorithms. The following chapters highlight
-a selection of problems commonly occurring when implementing reference counting
-garbage collection \cite[2. Overview]{gc-references_2021}.
-
-\paragraph{Memory usage}
+\subsubsection{Memory usage}
 Reference counting requires attaching a reference counter onto allocated
 objects, thus increasing the overall memory footprint proportionally to the
 amount of allocated objects and a reference counter for each object.
@@ -233,7 +233,7 @@ Memory footprint with reference counting:
 nm + nr
 \end{align*}
 
-\paragraph{Cycles}
+\subsubsection{Cycles}
 
 Two or more objects creating references to each other is described as a
 reference cycle. This results in none of the objects being categorised as
@@ -244,7 +244,7 @@ A way to prevent reference cycles is by extending reference counting garbage
 collection to specifically detecting cycles, as is the case in \textit{CPython}
 \cite[1.10 Reference Counts]{python-extending-gc_2008}. 
 
-\paragraph{Increment and Decrement Workload}
+\subsubsection{Increment and Decrement Workload}
 
 Each reference creation and reference falling out of scope requires
 modification of the reference count of one or more objects \cite[6.1 Immediate
@@ -255,7 +255,7 @@ object is no longer referenced \cite[6.2 Deferred Reference
 Couting]{gc-generational-scavenging_1984} or merging reference counter
 modifications \cite[Abstract]{gc-on-the-fly_2006}.
 
-\paragraph{Thread safety}
+\subsubsection{Thread safety}
 
 Reference counting garbage collection requires atomic operations in
 multithreaded environments to keep a consistent count of references. This
