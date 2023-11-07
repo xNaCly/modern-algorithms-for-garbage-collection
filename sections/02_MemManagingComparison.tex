@@ -14,7 +14,7 @@ When a variable is no longer needed, it is said to have reached the end of its \
 This memory management technique was first introduced in the Rust programming language \cite[1. Introduction]{rust_borrow_formalism_2021}.
 Because Rust was the first language to implement this concept, the examples in this section will be written in Rust.
 
-\subsubsection{Ownership}
+\subsection{Ownership}
 
 The first step to understand this technique is to understand the concept of \textit{ownership}.
 
@@ -31,7 +31,7 @@ instead of copying it \cite[2.2 Ownership]{rust_borrow_formalism_2021}. The same
 Because of this variables can not be used after being used in a variable assignment or function call.
 
 A example showcasing the ownership concept similar\footnotemark to the C example presented in the introduction
-can be found in listing \autoref{code:rust_ownership_person_example}.
+can be found in \autoref{code:rust_ownership_person_example}.
 \footnotetext{
     The presented Rust example differs from the C example because the
     \texttt{create\_person} function does not return a reference but a value.
@@ -76,7 +76,7 @@ fn main() {
     \label{code:rust_ownership_person_example}
 \end{listing}
 
-\subsubsection{Borrowing}
+\subsection{Borrowing}
 
 The second step to understand this technique is to understand the concept of \textit{borrowing}.
 Allowing only one owner to access a variable at a time would be too restrictive
@@ -85,7 +85,7 @@ for many uses cases.
 As a example calling the \texttt{print\_person} function twice on the same person
 would not be possible, because the ownership of the person would be moved to the
 function after the first call and cannot be accessed anymore.
-This is illustrated in listing \autoref{code:rust_person_double_print}.
+This is illustrated in \autoref{code:rust_person_double_print}.
 
 \begin{listing}[H] 
     \begin{minted}{rust}
@@ -109,7 +109,7 @@ but only one mutable borrow at a time. This is done to avoid data races but
 is not strictly needed for the memory management aspect of the technique.
 
 A modified version of the presented person example to make use of borrows
-can be found in listing \autoref{code:rust_borrow_person_example}.
+can be found in \autoref{code:rust_borrow_person_example}.
 
 \begin{listing}[H] 
     \begin{minted}{rust}
@@ -130,5 +130,5 @@ fn main() {
 % TODO: explain borrow checking
 % TODO: lifetimes for functions returning values and structs
 
-\subsubsection{Multi-owner values using reference counters}
+\subsection{Multi-owner values using reference counters}
 
