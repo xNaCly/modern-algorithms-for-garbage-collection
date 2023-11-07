@@ -17,12 +17,13 @@ differentiation between these and thereby introduces terms necessary for
 understanding the following chapters. 
 
 \section{Scope}
+\label{sec:scope}
 
 The scope of garbage collection refers to the variables, resources and memory
 areas it manages. Garbage collection is generally responsible for managing
 already allocated memory, either by the programmer or the libraries /
 subroutines the programmer uses \cite[Abstract]{learned-gc_2020}. The
-aforementioned can be cumulated as heap allocated memory or dynamically
+aforementioned can be cumulated to heap allocated memory or dynamically
 allocated memory. This represents the purview of a garbage collector \cite[1
 Introduction]{age-based-gc_1999}. The listing \autoref{code:java_gc_variables}
 showcases variables that will be garbage collected upon the scope of the
@@ -66,3 +67,237 @@ class NotGarbageCollected {
 \end{listing}
 
 \section{Strategies}
+
+Garbage collection can be implemented using a variety of strategies, each
+differing in their code complexity, RAM/CPU usage and execution speed \cite[4.3
+Benchmarks]{gc-performance_2004} \cite[Motivation and Historical
+Perspective]{gc-hardware_2018}.
+
+\subsection{Tracing}
+
+Most commonly the term garbage collection is used to refer to tracing garbage
+collection. This strategy of automatically managing memory is a common way of
+implementing garbage collection. Tracing is defined as determining which
+objects should be deallocated. This is done by tracing which of the currently
+allocated objects are accessible via linked references. Accessible objects are
+marked as alive. Memory regions not accessible via this list are not marked and
+therefore considered to be unused memory and are deallocated. \cite[Garbage
+Collection Background]{gc-hardware_2018}
+
+Programming languages such as \textit{Java} \cite[2.2 Full GC
+algorithm]{java_gc_comparison_2019}, \textit{Go} \cite[Tracing Garbage
+Collection]{go_gcguide_2022} and \textit{Ocaml} \cite[Garbage Collection,
+Reference Counting, and Explicit Allocation]{ocmal_gc_unknown} use this
+strategy for deallocating unused memory regions.
+
+\subsubsection{Categorizing memory}
+\label{sec:categorizing_memory}
+
+Objects\footnote{Dynamically allocated memory region containing one or more
+values \cite[Tracing Garbage Collection]{go_gcguide_2022}} are categorised as
+reachable or alive if they are referenced by at least one variable in the
+currently running program, see \autoref{code:java_memory_categories_example}
+for a visualisation. This includes references from other reachable objects. As
+introduced before, the definition of tracing garbage collection includes
+determining whether or not objects are reachable. In the paragraph above, this
+reachability is defined. This definition does not include the objects the
+tracing garbage collector refers to as \textit{root}-objects
+\cite[Preliminaries: Heap Depth and Tracing]{tracing-gc_barabash_2010}.
+root-objects are defined as generally accessible, such as local variables,
+parameters and global variables.\footnote{As introduced in \autoref{sec:scope}:
+variables on the call stack or static variables} Root-objects are used as a
+starting point for tracing allocated objects \cite[Preliminaries: Heap Depth
+and Tracing]{tracing-gc_barabash_2010}.\\
+
+In \autoref{code:java_memory_categories_example}, both values initially
+assigned to \texttt{x} and \texttt{y} in the \texttt{Main.main} function are
+considered inaccessible due to the reassignment of \texttt{x} and \texttt{y}
+in the following lines. The value of the variable \texttt{z} in the
+\texttt{Main.f} function is considered inaccessible once the scope of the
+function ends, when the variable \texttt{z} is dropped from the call stack -
+rendering its value inaccessible. 
+
+\begin{listing}[H] 
+    \begin{minted}{Java} 
+public class Main {
+    public static void main(String[] args) {
+        var x = new Object();
+        x = new Object();
+        var y = new Object();
+        y = new Object();
+        Main.f();
+    }
+
+    private static void f() {
+        var z = new Object();
+    }
+}
+    \end{minted}
+    \caption{Java example for accessible and inaccessible memory}
+    \label{code:java_memory_categories_example}
+\end{listing}
+
+
+\subsubsection{Implementations}
+
+As introduced before the main idea behind tracing garbage collection is to
+trace the memory set\footnote{Virtual memory the program makes use of}. Garbage
+collection is often performed in cycles. Cycles are triggered when certain
+conditions are met, such as the program running out of memory and therefore not
+being able to satisfy an allocation request or the cycles are ran on a
+predefined interval. The process of tracing memory and deallocating memory
+require separation, they are therefore often split into different garbage
+collection cycles. The following concepts and implementation details can be and
+are generally intertwined in modern garbage collectors \cite[The GC
+cycle]{go_gcguide_2022} \cite{ocmal_gc_unknown}.
+
+\paragraph{Mark and Sweep}
+
+Garbage collectors using the \textit{mark and sweep}-concept traverse the
+object graph\footnote{Objects and pointers to objects} starting from the
+root-objects, therefore satisfying the definition of a tracing garbage
+collector, as presented in \autoref{sec:categorizing_memory}. The main detail
+of the mark and sweep technique is marking each encountered object of the
+object graph as alive. This stage of the process is referred to as
+\textit{marking}. The stage defined as \textit{sweeping} entails walking over
+the memory on the heap and deallocating all non marked objects \cite[Tracing
+Garbage Collection]{go_gcguide_2022}.
+
+\paragraph{Generational}
+
+Generational garbage collection is based on the empirical observation that
+recently allocated objects are most likely to be inaccessible
+quickly\footnote{Generally known as \textit{infant mortality} or
+\textit{generational hypothesis}}. Objects are differentiated into generations,
+this is often implemented by using separate memory regions for different
+generations. Upon filling a generations memory region its objects are being
+traced by using the older generation as roots, this usually results in most
+objects of the generation being deallocated. The remaining objects are moved
+into the older generations memory region \cite[2 Age-based Garbage
+Collection]{age-based-gc_1999}. This technique results in fast incremental
+garbage collection, considering one memory region at a time is required to be
+collected. \cite[3 Benchmarks]{age-based-gc_1999}
+
+\paragraph{Stop the world}
+
+Stop the world garbage collector refer to the process of halting the execution
+of the program for running a garbage collection cycle. Therefore guaranteeing
+that no new objects are allocated or becoming unreachable while performing the
+garbage collection cycle. The main advantage of this implementation approach
+is that it introduces less code complexity while being faster than the
+previously introduced incremental garbage collection \cite[5. The Garbage
+Collection Algorithms]{gc-multiprocess_1975}. This technique is inherently
+unsuited for applications requiring real-time performance, such as games or
+web servers in which unexpected latency has drastic results.
+
+\subsection{Reference Counting}
+
+Reference counting garbage collection is defined as each object keeping track
+of the amount of references made to it. This reference counter is incremented
+for each created reference and decremented for each destroyed reference. Once
+the counter reaches 0 the object is no longer considered reachable and
+therefore deallocated \cite[2.2 Precise Reference Counting]{gc-references_2021}
+\cite[6. Reference Counting Automatic Storage Reclamation
+Algorithms]{gc-generational-scavenging_1984}. \\
+
+In contrast to the previously introduced tracing garbage collection this
+approach promises that objects are immediately deallocated once their last
+reference is destroyed. Due to the reference count being attached to their
+respective objects this strategy is CPU cache friendly \cite[1.
+Introduction]{gc-references_2021}.
+
+Reference counting garbage collection has several disadvantages to the
+aforementioned tracing garbage collection. These can be mitigated via
+sophisticated algorithms. The following chapters highlight a selection of
+problems commonly occurring when implementing reference counting garbage
+collection \cite[2. Overview]{gc-references_2021}.
+
+\subsubsection{Memory usage}
+Reference counting requires attaching a reference counter onto allocated
+objects, thus increasing the overall memory footprint proportionally to the
+amount of allocated objects and a reference counter for each object.
+
+\begin{align*}
+n &:= \textrm{Amount of Objects}\\
+m &:= \textrm{Object size} \\
+r &:= \textrm{Reference counter size}
+\end{align*}
+
+Memory footprint without reference counting:
+\begin{align*}
+nm 
+\end{align*}
+
+Memory footprint with reference counting:
+\begin{align*}
+nm + nr
+\end{align*}
+
+\subsubsection{Cycles}
+
+Two or more objects creating references to each other is described as a
+reference cycle. This results in none of the objects being categorised as
+garbage as their collective references never let their reference count
+decrement to 0. 
+
+A way to prevent reference cycles is by extending reference counting garbage
+collection to specifically detecting cycles, as is the case in \textit{CPython}
+\cite[1.10 Reference Counts]{python-extending-gc_2008}. 
+
+\subsubsection{Increment and Decrement Workload}
+
+Each reference creation and reference falling out of scope requires
+modification of the reference count of one or more objects \cite[6.1 Immediate
+Reference Counting]{gc-generational-scavenging_1984}. There are methods for
+decreasing this workload, such as ignoring stack references to objects until
+they are about to be deallocated, triggering a stack scan for making sure the
+object is no longer referenced \cite[6.2 Deferred Reference
+Couting]{gc-generational-scavenging_1984} or merging reference counter
+modifications \cite[Abstract]{gc-on-the-fly_2006}.
+
+\subsubsection{Thread safety}
+
+Reference counting garbage collection requires atomic operations in
+multithreaded environments to keep a consistent count of references. This
+requires expensive overhead and is often mitigated with a reference counter per
+thread. This solution introduces significant memory overhead and is not
+commonly used \cite[1.2 Reference-Counting on a
+Multiprocessor]{gc-on-the-fly_2006}.
+
+\subsection{Escape Analysis}
+
+The term \textit{escape analysis} describes a compile-time technique for
+determining where to store an object, either on the heap or the stack. At a
+high-level the analysis determines whether an allocated object is reachable
+outside of its current scope. If so the object is said to \textit{escape} to
+the heap. Otherwise the object is allocated on the stack and as previously
+introduced deallocated/dropped once the scope ends.
+\cite[\texttt{l.18}]{go-escape}. Due to the omitted cost of managing the short
+lived allocated objects not used outside of their scope, the workload of the
+garbage collector is reduced significantly \cite[Escape
+analysis]{go_gcguide_2022}.
+
+
+\begin{listing}[H] 
+    \begin{minted}{Go} 
+type T struct { x int64 }
+
+func A() *T {
+    return &T{x:12}
+}
+
+func B() {
+    t := &T{x:25}; t.x++
+}
+    \end{minted}
+    \caption{Go example for escape analysis}
+    \label{code:go_escape_analysis}
+\end{listing}
+
+In \autoref{code:go_escape_analysis} the allocated structure of type
+\texttt{*T} in function \texttt{A} escapes to the heap due to the fact that it
+is returned from \texttt{A}. The structure assigned to \texttt{t} of type
+\texttt{*T} in \texttt{B} is dropped upon the \mintinline{go}{t.x++}
+instruction is executed and the scope of \texttt{B} ends. The Go compiler
+allocates the value of \texttt{t} on the stack - a direct result of escape
+analysis \cite{go-escape}.
