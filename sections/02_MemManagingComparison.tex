@@ -30,9 +30,8 @@ is that variable assignments like \texttt{let a = b} are moving the value
 instead of copying it \cite[2.2 Ownership]{rust_borrow_formalism_2021}. The same goes for the parameter values for function calls.
 Because of this variables can not be used after being used in a variable assignment or function call.
 
-A example showcasing the ownership concept similar\footnotemark to the C example presented in the introduction
-can be found in \autoref{code:rust_ownership_person_example}.
-\footnotetext{
+A example showcasing the ownership concept similar
+\footnote{
     The presented Rust example differs from the C example because the
     \texttt{create\_person} function does not return a reference but a value.
     However the struct consists of a \texttt{String} which is a heap allocated
@@ -44,6 +43,12 @@ can be found in \autoref{code:rust_ownership_person_example}.
     be to use a \texttt{std::boxed::Box<T>}. This was not used in this
     example for legibility reasons.
 }
+to the C example presented in the introduction
+can be found in \autoref{code:rust_ownership_person_example}
+\footnote{
+    A more idomatic Rust implementation would define the new and print functions as methods of the Person struct.
+    This was not done here to keep the example simple for readers not familiar with Rust.
+}.
 
 \begin{listing}[H] 
     \begin{minted}{rust}
@@ -131,4 +136,64 @@ fn main() {
 % TODO: lifetimes for functions returning values and structs
 
 \subsection{Multi-owner values using reference counters}
+
+Some usecases require a value to be owned by multiple owners at the same time.
+These usecases include shared memory and cyclic data structures.
+
+Allowing multiple owners for a single value can be done by using reference counters as a escape hatch.
+A reference counter is a data structure that keeps track of the number of owners
+of a value and drops the value when the number of owners reaches zero.
+This is done by incrementing the counter when a new owner is created using \texttt{.clone()}
+and decrementing it when a owner is dropped.
+Reference counter implementations are available in the Rust standard library
+as \texttt{std::rc::Rc<T>} and \texttt{std::sync::Arc<T>} for single threaded and atomic
+multi-threaded use respectively.
+An example of this can be found in \autoref{code:rust_ref_counter_example}.
+
+\begin{listing}
+    \begin{minted}{rust}
+fn main() {
+    // Create an Rc that contains a person
+    let person = Rc::new(new_person("Rainer Zufall".into(), 42.0));
+
+    // Clone the Rc to create additional references
+    // These can be moved to other owners and outlive the original Rc instance
+    let clone1 = Rc::clone(&person);
+    let clone2 = Rc::clone(&person);
+
+    println!("Reference count of person: {}", Rc::strong_count(&person));
+
+    // Access the data through the cloned references
+    println!("clone1 data: {:?}", clone1);
+    println!("clone2 data: {:?}", clone2);
+
+    // When the references go out of scope, the reference count decreases
+    drop(clone1);
+    println!("Count after dropping clone1: {}", Rc::strong_count(&person));
+
+    drop(clone2);
+    println!("Count after dropping clone2: {}", Rc::strong_count(&person));
+
+    // At this point, the reference count drops to zero, and the memory is
+    // deallocated because the last reference is dropped.
+}
+
+// output:
+// Reference count of person: 3
+// clone1 data: Person { name: "Rainer Zufall", age: 42.0 }
+// clone2 data: Person { name: "Rainer Zufall", age: 42.0 }
+// Count after dropping clone1: 2
+// Count after dropping clone2: 1
+    \end{minted}
+    \caption{Reference counter example in Rust}
+    \label{code:rust_ref_counter_example}
+\end{listing}
+
+The cloned reference counter instance can be moved to other owners and outlive the original instance.
+This works great for non-cyclic data structures, but not so well by itself for cyclic data structures
+(see \autoref{sec:reference_counting_cycles}) because the reference counter will never reach zero
+and the memory will never be freed.
+To solve this problem, you can use weak references or break the cycle manually
+when you are done with the data structure.
+
 
