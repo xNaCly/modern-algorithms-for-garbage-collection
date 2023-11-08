@@ -146,12 +146,14 @@ of a value and drops the value when the number of owners reaches zero.
 This is done by incrementing the counter when a new owner is created using \texttt{.clone()}
 and decrementing it when a owner is dropped.
 Reference counter implementations are available in the Rust standard library
-as \texttt{std::rc::Rc<T>} and \texttt{std::sync::Arc<T>} for single threaded and atomic
+as \texttt{std::rc::Rc<T>} \cite[320-323]{rust_book_2019} and \texttt{std::sync::Arc<T>} \cite[361]{rust_book_2019} for single threaded and atomic
 multi-threaded use respectively.
 An example of this can be found in \autoref{code:rust_ref_counter_example}.
 
 \begin{listing}
     \begin{minted}{rust}
+use std::rc::Rc;
+
 fn main() {
     // Create an Rc that contains a person
     let person = Rc::new(new_person("Rainer Zufall".into(), 42.0));
@@ -193,7 +195,8 @@ The cloned reference counter instance can be moved to other owners and outlive t
 This works great for non-cyclic data structures, but not so well by itself for cyclic data structures
 (see \autoref{sec:reference_counting_cycles}) because the reference counter will never reach zero
 and the memory will never be freed.
-To solve this problem, you can use weak references or break the cycle manually
+To solve this problem, you can use weak references \cite[334-335]{rust_book_2019} or break the cycle manually
 when you are done with the data structure.
+When the developer does not deal with this problem a memory leak will occur.
 
 
