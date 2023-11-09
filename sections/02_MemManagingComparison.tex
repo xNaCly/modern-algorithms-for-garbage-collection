@@ -11,7 +11,8 @@ at compile time by the compiler, if the compiler can prove that the memory is no
 When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
 % TODO: introduce borrow checking here shortly for context
 
-This memory management technique was first introduced in the Rust programming language \cite[1. Introduction]{rust_borrow_formalism_2021}.
+This memory management technique in the presented form was first introduced in the Rust programming language
+\cite[1. Introduction]{rust_borrow_formalism_2021}.
 Because Rust was the first language to implement this concept, the examples in this section will be written in Rust.
 
 \subsection{Ownership}
@@ -102,16 +103,14 @@ print_person(person); // error: use of moved value: `person`
     \label{code:rust_person_double_print}
 \end{listing}
 
-% TODO: citations, sources, sources everywhere
-
 The solution to this problem is the concept of borrowing.
 It essentially is the pointer concept from C and other languages but with
 the ownership model of Rust in mind, which imposes some restrictions on it.
 Borrowing allows a value owner to give another function or struct
-access to a value without giving ownership to the function.
+access to a value without giving ownership to the function \cite[2.3 Borrowing]{rust_borrow_formalism_2021}.
 A owner can hand out many read-only borrows to a value at the same time,
 but only one mutable borrow at a time. This is done to avoid data races but
-is not strictly needed for the memory management aspect of the technique.
+is not strictly needed for the memory management aspect of the technique \cite[90]{rust_book_2019}.
 
 A modified version of the presented person example to make use of borrows
 can be found in \autoref{code:rust_borrow_person_example}.
