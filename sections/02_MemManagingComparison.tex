@@ -9,7 +9,6 @@ of a new memory management technique called \textit{lifetimes and borrow checkin
 The main idea behind this technique is that the corresponding \texttt{free} calls for heap memory can be automatically inserted
 at compile time by the compiler, if the compiler can prove that the memory is no longer needed.
 When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
-% TODO: introduce borrow checking here shortly for context
 
 This memory management technique in the presented form was first introduced in the Rust programming language
 \cite[1. Introduction]{rust_borrow_formalism_2021}.
@@ -131,8 +130,13 @@ fn main() {
     \label{code:rust_borrow_person_example}
 \end{listing}
 
-% TODO: explain borrow checking
-% TODO: lifetimes for functions returning values and structs
+A borrow can only be used as long as the owner is still alive.
+A borrow can not outlive the owner variable.
+This is enforced at compile time using the borrow checker.
+Through this free-after-use errors can be detected at compile time.
+This also means that the timepoint in program execution when a heap allocated
+value is no longer needed is always when the owner variable lifetime ends
+because there cannot be any borrows to the value after that point \cite[188]{rust_book_2019} \cite[2.4 Reference Lifetimes]{rust_borrow_formalism_2021} \cite{rust_effective_borrow_checker}.
 
 \subsection{Multi-owner values using reference counters}
 
