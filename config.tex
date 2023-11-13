@@ -1,4 +1,4 @@
-\documentclass[12pt, a4paper]{scrreport}
+\documentclass[12pt, a4paper, parskip=half]{scrreport}
 
 % Font: Helvetica
 \usepackage[T1]{fontenc}
@@ -18,6 +18,7 @@
 \usepackage[margin=2.5cm, foot=1cm]{geometry}
 \usepackage[hidelinks=false]{hyperref}
 \usepackage[chapter]{minted}
+\usemintedstyle{perldoc}
 \usepackage{float}
 
 \setlength{\parindent}{0cm}
@@ -28,3 +29,7 @@
 
 \setcounter{secnumdepth}{6}
 \setcounter{tocdepth}{6}
+
+% Keep more footnotes on the same page
+% before pushing them to the next page
+\interfootnotelinepenalty=10000

@@ -14,3 +14,4 @@
 *.synctex.gz
 _minted-main
 *.pdf
+*.synctex(busy)

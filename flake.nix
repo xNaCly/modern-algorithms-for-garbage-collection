@@ -10,13 +10,14 @@
       pkgs = nixpkgs.legacyPackages.${system};
       tex = pkgs.texlive.combine {
           inherit (pkgs.texlive) scheme-full latex-bin latexmk;
-      };
+        };
+      pythonPackages = ps: with ps; [pygments];
     in rec {
       packages = {
         document = pkgs.stdenvNoCC.mkDerivation rec {
           name = "seminar-garbage-collection-latex-doc";
           src = self;
-          buildInputs = [ pkgs.coreutils tex ];
+          buildInputs = [ pkgs.coreutils tex pkgs.python3.withPackages pythonPackages ];
           phases = ["unpackPhase" "buildPhase" "installPhase"];
           buildPhase = ''
             export PATH="${pkgs.lib.makeBinPath buildInputs}";
