@@ -37,8 +37,8 @@ int main() {
 
 This technique is very error prone and can lead to memory leaks and use-after-free errors
 resulting in undefined behaviour and security vulnerabilities as explained in \autoref{sec:introduction}.
-However it is usually the most performant memory management technique because it does not have any overhead
-required for garbage collection.
+However it is usually the fastest memory management technique because it does not have any overhead
+compared to garbage collection.
 
 
 \section{Lifetimes and Borrow Checking}
@@ -49,7 +49,7 @@ The main idea behind this technique is that the corresponding \texttt{free} call
 at compile time by the compiler, if the compiler can prove that the memory is no longer needed.
 When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
 
-Because this is run at compile-time the performance is comparable to manual memory management.
+Because this is run at compile-time the performance is similar to manual memory management.
 The safety is comparable to garbage collection because the compiler can prove that there are no use-after-free errors
 or memory leaks when compiling, assuming the compiler is correct.
 While this technique has the best-of-both-worlds properties of manual memory management and garbage collection
