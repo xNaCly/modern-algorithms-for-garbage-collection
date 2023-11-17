@@ -1,6 +1,45 @@
 \chapter{Comparison with other Memory Management Techniques}
 
+In this section alternatives to garbage collection for memory management
+are presented and compared to garbage collection.
+
 \section{Manual Memory Management}
+
+Manual memory management is the most basic memory management technique.
+It is used in languages like C and C++.
+In this technique the programmer is responsible for allocating and freeing memory.
+This is done by calling the \texttt{malloc} and \texttt{free} functions in C and the \texttt{new} and \texttt{delete} operators in C++.
+The programmer has to keep track of the allocated memory and free it when it is no longer needed.
+This is done by storing the pointer returned by the allocation function in a variable and passing it to the free function when it is no longer needed.
+This is illustrated in \autoref{code:c_manual_memory_management_example}.
+
+\begin{listing}[H] 
+    \begin{minted}{c}
+int main() {
+    // Allocate memory for a single integer
+    int* a = malloc(sizeof(int));
+    *a = 42;
+
+    // Allocate memory for an array of 10 integers
+    int* b = malloc(sizeof(int) * 10);
+    for (int i = 0; i < 10; i++) {
+        b[i] = i;
+    }
+
+    // Free the allocated memory
+    free(a);
+    free(b);
+}
+    \end{minted}
+    \caption{Example of manual memory management in C}
+    \label{code:c_manual_memory_management_example}
+\end{listing}
+
+This technique is very error prone and can lead to memory leaks and use-after-free errors
+resulting in undefined behaviour and security vulnerabilities as explained in \autoref{sec:introduction}.
+However it is usually the fastest memory management technique because it does not have any overhead
+compared to garbage collection.
+
 
 \section{Lifetimes and Borrow Checking}
 
@@ -10,8 +49,15 @@ The main idea behind this technique is that the corresponding \texttt{free} call
 at compile time by the compiler, if the compiler can prove that the memory is no longer needed.
 When a variable is no longer needed, it is said to have reached the end of its \textit{lifetime} hence the name of the technique.
 
-This memory management technique in the presented form was first introduced in the Rust programming language
-\cite[1. Introduction]{rust_borrow_formalism_2021} replacing the garbage collector it initially had\cite{rust_gc_removal}.
+Because this is run at compile-time the performance is similar to manual memory management.
+The safety is comparable to garbage collection because the compiler can prove that there are no use-after-free errors
+or memory leaks when compiling, assuming the compiler is correct.
+While this technique has the best-of-both-worlds properties of manual memory management and garbage collection
+for safety and performance, it lacks in ease-of-use because the programmer has to follow a set of rules.
+Satifying these rules can be difficult and can take sometimes take a time, especially for beginners \cite{rust_usability}
+
+This memory management technique in the presented form was first introduced in the \textit{Rust} programming language
+\cite[1. Introduction]{rust_borrow_formalism_2021} replacing the garbage collector it initially had \cite{rust_gc_removal}.
 Because Rust was the first language to implement this concept, the examples in this section will be written in Rust.
 
 \subsection{Ownership}
