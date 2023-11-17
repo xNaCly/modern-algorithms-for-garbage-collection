@@ -1,4 +1,5 @@
 \chapter{Garbage Collection}
+\label{sec:overview}
 
 As introduced before (see \autoref{sec:introduction}) the process of garbage
 collection is required by many programming languages via their specification,
@@ -164,6 +165,7 @@ the memory on the heap and deallocating all non marked objects \cite[Tracing
 Garbage Collection]{go_gcguide_2022}.
 
 \paragraph{Generational}
+\label{sec:gc_generational}
 
 Generational garbage collection is based on the empirical observation that
 recently allocated objects are most likely to be inaccessible
