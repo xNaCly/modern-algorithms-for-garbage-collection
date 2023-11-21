@@ -19,7 +19,9 @@ tuned to a specific use case.
 
 Contrary to the theoretical concept of a generational garbage collector,
 the memory areas for each generations are not continuous in memory.
-Instead the G1GC uses a heap divided into regions usually 1MB - 32MB in size.
+Instead the G1GC uses a heap divided into regions usually 1 MB - 32 MB in size.
 Each region is assigned to one of the generations.
 These generations are called Eden, Survivor and Old. \cite{java_g1_getting_started}
 
+% TODO: compacting
+% TODO: configurable gc pauses (length)
