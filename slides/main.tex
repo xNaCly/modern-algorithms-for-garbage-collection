@@ -9,7 +9,7 @@
 \date[2023]{2023}
 \author{9525469, 6424019} 
 
-\institute[DHBW]{DHBW}
+\institute[DHBW Mosbach]{DHBW Mosbach}
 
 \date{\today}
 
@@ -32,9 +32,42 @@
             \frametitle{Strategien}
         \end{frame}
 
-        \subsection{Generation garbage collection}
+        \subsection{Generational garbage collection}
             \begin{frame}
-                \frametitle{Strategien - Generation garbage collection}
+                \frametitle{Strategien - Generational garbage collection}
+                Optimierung basierend auf der Beobachtung, dass die meisten Objekte nur kurzlebig sind (Infant Mortality)\\
+                Speicher wird in drei Teile/Generationen aufgeteilt:
+                \begin{itemize}
+                    \item Young
+                    \item Old
+                    \item Permanent
+                \end{itemize}
+                % Unterteilung des Heaps in die Generationen:
+                % https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html
+                % https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/images/HeapStructure.png
+                \includegraphics[width=\textwidth]{images/GenerationalGCHeapStructure.png}
+            \end{frame}
+
+            \begin{frame}
+                \frametitle{Strategien - Generational garbage collection}
+                \begin{itemize}
+                    \item Eden
+                    \begin{itemize}
+                        \item Alle neuen Objekte werden hier allokiert
+                        \item Objekte welche eine gewisse Zeit überleben werden in den Survivor Space verschoben
+                    \end{itemize}
+                    \item Survivor
+                    \begin{itemize}
+                        \item Hier sind Objekte welche eine gewisse Zeit überlebt haben
+                        \item Bei einem Garbage Collection Zyklus werden die Objekte in den jeweils anderen Survivor Space verschoben
+                        \item Objekte welche eine gewisse Zeit überlebt haben werden in den Old Space verschoben
+                    \end{itemize}
+                    \item Old
+                    \begin{itemize}
+                        \item Hier sind Objekte welche schon länger existieren und es unwahrscheinlich ist, dass sie bald gelöscht werden
+                    \end{itemize}
+                \end{itemize}
+                Bei Garbage Collection von Eden, was am aufgrund von Infant Mortality häufigsten passiert, müssen lang lebende Objekte nicht beachtet werden.
             \end{frame}
 
         \subsection{Mark \& Sweep}
