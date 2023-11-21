@@ -50,16 +50,62 @@
     \section{Programmiersprachen}
         \begin{frame}
             \frametitle{Programmiersprachen}
+
+            \begin{itemize}
+                \item Viele Sprachen mit und ohne GC
+                \item Algorithmen, Implementierungen und Performance sehr unterschiedlich
+                \item High level sprachen eher mit GC, low level eher ohne
+            \end{itemize}
         \end{frame}
 
         \subsection{Ohne Garbage collection}
             \begin{frame}
                 \frametitle{Programmiersprachen - Ohne gc}
+
+                \begin{itemize}
+                    \item C
+                    \begin{itemize}
+                        \item manuelles memory managment
+                    \end{itemize}
+                    \item C++
+                    \begin{itemize}
+                        \item manuelles memory managment
+                        \item reference counting on demand
+                    \end{itemize}
+                    \item Rust
+                    \begin{itemize}
+                        \item borrow checker
+                        \item reference counting on demand
+                    \end{itemize}
+                \end{itemize}
             \end{frame}
 
         \subsection{Mit Garbage collection}
             \begin{frame}
                 \frametitle{Programmiersprachen - Mit gc}
+                \begin{itemize}
+                    \item Go
+                    \begin{itemize}
+                        \item escape analysis
+                        \item mark \& sweep
+                    \end{itemize}
+                    \item Java
+                    \begin{itemize}
+                        \item mehrere garbage collectoren
+                        \item generational standardmäßig
+                        \item JIT, Bytecode vm (JVM)
+                    \end{itemize}
+                    \item Python
+                    \begin{itemize}
+                        \item Reference counting
+                        \item Erkennung von Referenzzyklen
+                    \end{itemize}
+                    \item JavaScript
+                    \begin{itemize}
+                        \item generational
+                        \item JIT, Bytecode vm (V8)
+                    \end{itemize}
+                \end{itemize}
             \end{frame}
 
     \section{Implementierungen}
