@@ -89,13 +89,18 @@
             \frametitle{Strategien}
         \end{frame}
 
+        \subsection{Mark \& Sweep}
+            \begin{frame}
+                \frametitle{Strategien - Mark \& Sweep}
+            \end{frame}
+
         \subsection{Generational garbage collection}
             \begin{frame}
                 \frametitle{Strategien - Generational garbage collection}
                 Optimierung basierend auf der Beobachtung, dass die meisten Objekte nur kurzlebig sind (Infant Mortality)\\
-                Speicher wird in drei Teile/Generationen aufgeteilt:
+                Aufteilung in drei Speicherbereiche aufgeteilt:
                 \begin{itemize}
-                    \item Young
+                    \item Young, bestehend aus Eden und Survivor Space
                     \item Old
                     \item Permanent
                 \end{itemize}
@@ -116,25 +121,26 @@
                     \item Survivor
                     \begin{itemize}
                         \item Hier sind Objekte welche eine gewisse Zeit überlebt haben
-                        \item Bei einem Garbage Collection Zyklus werden die Objekte in den jeweils anderen Survivor Space verschoben
-                        \item Objekte welche eine gewisse Zeit überlebt haben werden in den Old Space verschoben
+                        \item Objekte welche eine längere Zeit überlebt haben werden in den Old Space verschoben
                     \end{itemize}
                     \item Old
                     \begin{itemize}
                         \item Hier sind Objekte welche schon länger existieren und es unwahrscheinlich ist, dass sie bald gelöscht werden
                     \end{itemize}
                 \end{itemize}
-                Bei Garbage Collection von Eden, was am aufgrund von Infant Mortality häufigsten passiert, müssen lang lebende Objekte nicht beachtet werden.
-            \end{frame}
-
-        \subsection{Mark \& Sweep}
-            \begin{frame}
-                \frametitle{Strategien - Mark \& Sweep}
+                Eden wird aufgrund von Infant Mortality häufig collected, ist aber klein da lang lebende Objekte nicht dort sind.
             \end{frame}
 
         \subsection{Reference counting}
             \begin{frame}
                 \frametitle{Strategien - Reference counting}
+
+                \begin{itemize}
+                    \item Jedes Objekt hat einen Zähler, welcher die Anzahl der Referenzen auf das Objekt zählt.\\
+                    \item Beim Erstellen eines Pointers auf das Objekt wird der Zähler inkrementiert, beim Löschen dekrementiert.\\
+                    \item Wird der Zähler 0, so wird das Objekt deallokiert.
+                \end{itemize}
+                Probleme bei Referenzzyklen: Zähler wird nie 0, Objekte werden nicht gelöscht.
             \end{frame}
 
     \section{Programmiersprachen}
@@ -183,7 +189,7 @@
                     \begin{itemize}
                         \item mehrere garbage collectoren
                         \item generational standardmäßig
-                        \item JIT, Bytecode vm (JVM)
+                        \item Compiliert in Bytecode(AOT), Ausführung mit Bytecode vm (JVM)
                     \end{itemize}
                     \item Python
                     \begin{itemize}
