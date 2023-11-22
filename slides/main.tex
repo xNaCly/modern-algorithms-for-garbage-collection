@@ -77,6 +77,13 @@
         \subsection{Reference counting}
             \begin{frame}
                 \frametitle{Strategien - Reference counting}
+
+                \begin{itemize}
+                    \item Jedes Objekt hat einen Zähler, welcher die Anzahl der Referenzen auf das Objekt zählt.\\
+                    \item Beim Erstellen eines Pointers auf das Objekt wird der Zähler inkrementiert, beim Löschen dekrementiert.\\
+                    \item Wird der Zähler 0, so wird das Objekt deallokiert.
+                \end{itemize}
+                Probleme bei Referenzzyklen: Zähler wird nie 0, Objekte werden nicht gelöscht.
             \end{frame}
 
     \section{Programmiersprachen}
@@ -125,7 +132,7 @@
                     \begin{itemize}
                         \item mehrere garbage collectoren
                         \item generational standardmäßig
-                        \item JIT, Bytecode vm (JVM)
+                        \item Compiliert in Bytecode(AOT), Ausführung mit Bytecode vm (JVM)
                     \end{itemize}
                     \item Python
                     \begin{itemize}
