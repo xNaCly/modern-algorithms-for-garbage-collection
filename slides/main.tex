@@ -2,6 +2,7 @@
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{hyperref}
 \graphicspath{{./assets/}}
 
 \title{Modern Algorithms for Garbage Collection}
@@ -22,10 +23,66 @@
 
     \tableofcontents
     
-	\section{Einleitung}
+	\section{Garbage collection}
         \begin{frame}
             \frametitle{Garbage collection}
+
+            Garbage collection ist definiert als
+
+            \begin{itemize}
+                \item Erkennung von nicht mehr verwendeten Speicherbereichen
+                \item automatisches Entfernen von nicht mehr verwendeten Speicherbereichen
+            \end{itemize}
+
+            Und zielt darauf ab das obige:
+
+            \begin{itemize}
+                \item schnell
+                \item effizient
+                \item ohne Latenz
+                \item mit wenig RAM und CPU Auslastung
+            \end{itemize}
+
+            umzusetzen.
         \end{frame}
+
+        \subsection{Garbage collection - Nutzen}
+            \begin{frame}
+                \frametitle{Garbage collection - Nutzen}
+
+                Befreit den Programmierer zumeist von:
+                \begin{itemize}
+                    \item Manueller Speicherallokierung mit \texttt{malloc}, \texttt{calloc} und \texttt{realloc}
+                    \item Manueller Speicherfreigabe mit \texttt{free}
+                    \item Pointer arithmetik
+                \end{itemize}
+
+                Verhindert Fehler wie: \footnote{70\% der CVE's von Chromium sind Speicherzugriffbezogen, siehe: \href{https://www.chromium.org/Home/chromium-security/memory-safety/}{https://www.chromium.org/Home/chromium-security/memory-safety/}}
+                \begin{itemize}
+                    \item Seg faults (illegaler Speicherzugriff) 
+                    \item Use after \texttt{free} (Speicherzugriff auf bereits aufgeräumte Speicherbereiche)
+                    \item Memory leaks (Speicher wird nach Verwendung nicht freigegeben)
+                \end{itemize}
+            \end{frame}
+
+        \subsection{Garbage collection - Problematiken}
+            \begin{frame}
+                \frametitle{Garbage collection - Problematiken}
+                \begin{itemize}
+                    \item Peformance schlechter im Vergleich zu manuellem
+                        management und borrow checker
+                        \begin{itemize}
+                            \item Latenz 
+                            \item RAM und CPU Verbrauch
+                            \item Generational, Mark \& Sweep: Scannen vom Heap langsam
+                            \item Reference counting: erhöhter Speicherverbrauch: 100 Objekte: $100*objektgroeße$ auf $100*(objektgroeße+countergroeße)$
+                        \end{itemize}
+                    \item Einfluss von GC-zyklen auf Program nicht vorhersehbar
+                    \item Manuelle Allokationen mit Speicherarena effizienter
+                        für große Datenmengen als jedes Objekt einzeln
+                        allokieren
+                \end{itemize}
+            \end{frame}
 
     \section{Strategien}
         \begin{frame}
