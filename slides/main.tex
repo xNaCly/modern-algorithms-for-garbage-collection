@@ -3,6 +3,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{minted}
+\usemintedstyle{perldoc}
 \graphicspath{{./assets/}}
 
 \title{Modern Algorithms for Garbage Collection}
@@ -261,6 +263,54 @@
             \begin{frame}
                 \frametitle{Performance - Nutzbarkeit}
             \end{frame}
+
+    \section{Borrow Checking}
+
+        \subsection{Theorie}
+        \begin{frame}
+            \frametitle{Borrow Checking - Theorie}
+
+            \texttt{free} Calls können automatisch eingefügt werden, wenn der Compiler weiß wielange ein Objekt verwendet wird (\textit{Lifetime})\\
+            $\Rightarrow$ automatisches Speichermanagement ohne GC\\
+            Um dies möglich zu machen werden die Konzepte des \textit{Ownership} und \textit{Borrowing} eingeführt.
+        \end{frame}
+
+        \begin{frame}
+            \frametitle{Borrow Checking - Ownership und Borrowing}
+            Ownership:
+            \begin{itemize}
+                \item Eine Variable hat einen Owner in Form einer Funktion
+                \item Ownership kann von einer Funktion an eine andere übergeben werden (pass by value/return via moves)
+            \end{itemize}
+            Um auf Variablen an mehreren Stellen zugreifen zu können, kann diese geborrowed (verliehen) werden:
+            \begin{itemize}
+                \item Der Owner einer Variable kann $n$ lesende Referenzen(via Pointer) und eine schreibende Referenz an andere Orte verleihen
+                \item Borrowing ist nur für einen bestimmten Zeitraum möglich (Lifetime)
+                \item Borrows dürfen nicht über den Lifetime des Owners hinausgehen, sichergegestellt durch den Borrow Checker
+            \end{itemize}
+        \end{frame}
+
+        \subsection{Beispiel in Rust}
+        \begin{frame}[fragile]
+            \frametitle{Borrow Checking - Beispiel in Rust}
+
+            \begin{minted}{rust}
+use std::io::{self, Error};
+
+fn main() -> Result<(), Error> {
+    println!("Eingabe: ");
+    let line = io::stdin().next();
+
+    if let Some(
+        println!("Gelesene Eingabe: \"{}\"", line?);
+    } else {
+        println!("Keine Eingabe");
+    }
+
+    Ok(())
+}
+            \end{minted}
+        \end{frame}
 
 \end{document}
 
