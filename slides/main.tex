@@ -266,7 +266,7 @@ struct PyObject {
             \end{frame}
 
             \begin{frame}
-                \frametitle{Java - G1 GC}
+                \frametitle{Java - G1 GC Speicherstruktur}
 
                 G1 ist ein generational GC.
                 G1 allokiert Speicherblöcke, welche jeweils einer Generation zugeordnet sind.
@@ -274,6 +274,17 @@ struct PyObject {
                 % https://www.oracle.com/technical-resources/articles/java/g1gc.html
                 \includegraphics[width=\textwidth]{images/G1MemoryRegions.png}
 
+            \end{frame}
+
+            \begin{frame}
+                \frametitle{Java - G1 GC Funktionsweise}
+
+                \begin{itemize}
+                    \item Wird eine Generation zu voll, so wird Garbage Collection gezielt für diesen Speicherbereich ausgeführt.
+                    \item Überlebende Objekte werden in einen neuen Bereich der gleichen oder darüberliegenden Generation kopiert
+                        \\$\Rightarrow$ Kompaktierung
+                    \item Dannach ist die Region leer und kann neu allokiert werden.
+                \end{itemize}
             \end{frame}
 
     \section{Performance}
