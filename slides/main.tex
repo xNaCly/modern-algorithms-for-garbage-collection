@@ -20,6 +20,7 @@
 \usetheme{metropolis}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{footline}[frame number]
+\setbeamertemplate{section in toc}[sections numbered]
 
 \begin{document}
     
@@ -290,7 +291,7 @@ struct PyObject {
             \begin{itemize}
                 \item Der Owner einer Variable kann $n$ lesende Referenzen(via Pointer) und eine schreibende Referenz an andere Orte verleihen
                 \item Borrowing ist nur für einen bestimmten Zeitraum möglich (Lifetime)
-                \item Borrows dürfen nicht über den Lifetime des Owners hinausgehen, sichergegestellt durch den Borrow Checker
+                \item Borrows dürfen nicht über den Lifetime des Owners hinausgehen, sichergestellt durch den Borrow Checker
             \end{itemize}
         \end{frame}
 
