@@ -253,6 +253,27 @@ struct PyObject {
         \subsection{Java}
             \begin{frame}
                 \frametitle{Implementierungen - Java}
+
+                Bei Java gibt es verschiedene GC-Implementierungen, welche via CLI Flag ausgewählt werden können.
+                \begin{itemize}
+                    \item Serial GC
+                    \item Parallel GC
+                    \item Concurrent Mark and Sweep (CMS)
+                    \item Garbage First (G1) GC
+                    \item Z GC
+                \end{itemize}
+                G1 ist Standard und wird deshalb hier vorgestellt.
+            \end{frame}
+
+            \begin{frame}
+                \frametitle{Java - G1 GC}
+
+                G1 ist ein generational GC.
+                G1 allokiert Speicherblöcke, welche jeweils einer Generation zugeordnet sind.
+
+                % https://www.oracle.com/technical-resources/articles/java/g1gc.html
+                \includegraphics[width=\textwidth]{images/G1MemoryRegions.png}
+
             \end{frame}
 
     \section{Performance}
