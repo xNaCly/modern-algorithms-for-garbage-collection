@@ -24,8 +24,6 @@
     
     \frame{\titlepage}
 
-    \tableofcontents
-    
 	\section{Garbage collection}
         \begin{frame}
             \frametitle{Garbage collection}
@@ -34,7 +32,7 @@
 
             \begin{itemize}
                 \item Erkennung von nicht mehr verwendeten Speicherbereichen
-                \item automatisches Entfernen von nicht mehr verwendeten Speicherbereichen
+                \item automatisches Entfernen dieser
             \end{itemize}
 
             Und zielt darauf ab das obige:
@@ -103,6 +101,11 @@
         \subsection{Mark \& Sweep}
             \begin{frame}
                 \frametitle{Strategien - Mark \& Sweep}
+                \begin{itemize}
+                    \item Scannt den Heap anfangend von Root Objekten
+                    \item markiert Objekte die am Leben sind
+                    \item deallokiert alle Objekte die nicht als am Leben markiert sind
+                \end{itemize}
             \end{frame}
 
         \subsection{Generational garbage collection}
