@@ -9,7 +9,7 @@ presented in \autoref{sec:overview}
 
 Java by default uses a generational garbage collector as introduced in \autoref{sec:gc_generational}.
 This garbage collector is called Garbage First (G1) and was introduced in Java 9 \cite{java_gc_comparison_2018}.
-Before that, Java used a parallel mark and sweep collector.
+Before that, Java used various types of mark and sweep collectors \cite{java_available_gcs}.
 
 Beyond those there are many more garbage collectors available for Java that can
 be used by specifying them as a command line argument to the JVM.
@@ -18,10 +18,11 @@ Nonetheless these can be very useful when wanting to use a garbage collector
 tuned to a specific use case.
 
 Contrary to the theoretical concept of a generational garbage collector,
-the memory areas for each generations are not continuous in memory.
-Instead the G1GC uses a heap divided into regions usually 1 MB - 32 MB in size.
+the memory areas for each generation in G1GC are not continuous in memory.
+Instead G1GC uses a heap divided into regions usually 1 MB - 32 MB in size.
 Each region is assigned to one of the generations.
 These generations are called Eden, Survivor and Old. \cite{java_g1_getting_started}
 
-% TODO: compacting
+% TODO: compacting, shendoah
 % TODO: configurable gc pauses (length)
+
