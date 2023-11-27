@@ -276,7 +276,7 @@
         \end{frame}
 
         \begin{frame}
-            \frametitle{Borrow Checking - Ownership und Borrowing}
+            \frametitle{Borrow Checking - Ownership \& Borrowing}
             Ownership:
             \begin{itemize}
                 \item Eine Variable hat einen Owner in Form einer Funktion
@@ -301,7 +301,7 @@ fn main() -> Result<(), Error> {
     println!("Eingabe: ");
     let line = io::stdin().next();
 
-    if let Some(
+    if let Some(line) = line {
         println!("Gelesene Eingabe: \"{}\"", line?);
     } else {
         println!("Keine Eingabe");
