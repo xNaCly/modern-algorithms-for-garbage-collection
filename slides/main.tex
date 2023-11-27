@@ -332,19 +332,18 @@ struct PyObject {
             \frametitle{Borrow Checking - Beispiel in Rust}
 
             \begin{minted}{rust}
-use std::io::{self, Error};
+use std::io::stdin;
 
-fn main() -> Result<(), Error> {
+fn main() {
     println!("Eingabe: ");
-    let line = io::stdin().next();
 
+    let line = stdin().lines().next();
     if let Some(line) = line {
-        println!("Gelesene Eingabe: \"{}\"", line?);
+        let line = line.expect("Fehler beim Lesen");
+        println!("Gelesene Eingabe: \"{line}\"");
     } else {
         println!("Keine Eingabe");
     }
-
-    Ok(())
 }
             \end{minted}
         \end{frame}

@@ -1,14 +1,13 @@
-use std::io::{self, Error};
+use std::io::stdin;
 
-fn main() -> Result<(), Error> {
+fn main() {
     println!("Eingabe: ");
 
-    let line = io::stdin().lines().next();
+    let line = stdin().lines().next();
     if let Some(line) = line {
-        println!("Gelesene Eingabe: \"{}\"", line?);
+        let line = line.expect("Fehler beim Lesen");
+        println!("Gelesene Eingabe: \"{line}\"");
     } else {
-        println!("\nKeine Eingabe");
+        println!("Keine Eingabe");
     }
-
-    Ok(())
 }
