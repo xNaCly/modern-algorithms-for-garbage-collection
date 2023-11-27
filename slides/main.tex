@@ -6,6 +6,7 @@
 \usepackage{minted}
 \usemintedstyle{perldoc}
 \graphicspath{{./assets/}}
+\setcounter{tocdepth}{1}
 
 \title{Modern Algorithms for Garbage Collection}
 \subtitle{Outlining modern algorithms for garbage collection on the examples of Go and Java}
@@ -23,6 +24,9 @@
 \begin{document}
     
     \frame{\titlepage}
+    \begin{frame}
+        \tableofcontents
+    \end{frame}
 
 	\section{Garbage collection}
         \begin{frame}
@@ -104,10 +108,15 @@
                 \begin{itemize}
                     \item Scannt den Heap anfangend von Root Objekten
                     \item markiert Objekte die am Leben sind
+                    \item während obigem meist Stop the World
                     \item deallokiert alle Objekte die nicht als am Leben markiert sind
                 \end{itemize}
             \end{frame}
 
+            \begin{frame}
+                \frametitle{Strategien - Mark \& Sweep}
+                \includegraphics[width=\textwidth]{images/Mark_nd_Sweep.png}
+            \end{frame}
         \subsection{Generational garbage collection}
             \begin{frame}
                 \frametitle{Strategien - Generational garbage collection}
@@ -156,6 +165,22 @@
                 \end{itemize}
                 Probleme bei Referenzzyklen: Zähler wird nie 0, Objekte werden nicht gelöscht.
             \end{frame}
+
+            \begin{frame}[fragile]
+                \frametitle{Strategien - Reference counting}
+
+                % https://github.com/python/cpython/blob/main/Include/object.h#L214
+                    \begin{minted}{c}
+struct PyObject {
+    // ...
+    uint32_t ob_ref_local;      // local reference count
+    // ...
+};
+                    \end{minted}
+
+                \includegraphics[width=\textwidth]{images/Reference-counting.png}
+            \end{frame}
+
 
     \section{Programmiersprachen}
         \begin{frame}
@@ -219,10 +244,6 @@
             \end{frame}
 
     \section{Implementierungen}
-        \begin{frame}
-            \frametitle{Garbage collection Implementierungen}
-        \end{frame}
-
         \subsection{Go}
             \begin{frame}
                 \frametitle{Implementierungen - Go}
@@ -246,27 +267,7 @@
                 \item Nutzbarkeit: Komplexität der Strategien
             \end{itemize}
         \end{frame}
-
-        \subsection{Speicherverbrauch}
-            \begin{frame}
-                \frametitle{Performance - Speicherverbrauch}
-            \end{frame}
-
-        \subsection{Latenz}
-            \begin{frame}
-                \frametitle{Performance - Latenz}
-            \end{frame}
-
-        \subsection{Sicherheit}
-            \begin{frame}
-                \frametitle{Performance - Sicherheit}
-            \end{frame}
-
-        \subsection{Nutzbarkeit}
-            \begin{frame}
-                \frametitle{Performance - Nutzbarkeit}
-            \end{frame}
-
+        
     \section{Borrow Checking}
 
         \subsection{Theorie}
@@ -314,6 +315,8 @@ fn main() -> Result<(), Error> {
 }
             \end{minted}
         \end{frame}
+
+    \section{Fragen?}
 
 \end{document}
 
