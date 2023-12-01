@@ -248,7 +248,39 @@ struct PyObject {
         \subsection{Go}
             \begin{frame}
                 \frametitle{Implementierungen - Go}
+
+                Go verwendet einen Mark \& Sweep garbage collector.
+
+            \begin{itemize}
+                    \item Concurrent
+                    \item Tri-color (objekte werden eingefärbt)
+                    \item Minimale Latenz durch kurzes stop the world
+                        \footnote{siehe:
+                        \href{https://www.youtube.com/watch?v=aiv1JOfMjm0}{https://www.youtube.com/watch?v=aiv1JOfMjm0}}
+                    \item Konfigurierbar über:
+                        \begin{itemize}
+                            \item \texttt{GOGC}: Größe heap relativ zur Größe aller erreichbaren Objekte
+                        \end{itemize}
+                \end{itemize}
             \end{frame}
+
+            \begin{frame}
+                \frametitle{GO - Tri-color}
+
+                Basierend auf Dijkstra (1978)\footnote{siehe:
+                \href{https://dl.acm.org/doi/10.1145/359642.359655}{https://dl.acm.org/doi/10.1145/359642.359655}} 
+
+                \begin{itemize}
+                    \item Objekte: Weiß, Grau oder Schwarz
+                    \item zu Begin des GC-Zyklus alle Objekte Weiß
+                    \item GC besucht alle Roots\footnote{stack \& statische variablen, etc...} markiert als Grau
+                    \item Ein Objekt wird ausgewählt und als Schwarz markiert, GC sucht ab hier nach Referenzen zu anderen Objekten
+                    \item Wird ein weißes Objekt gefunden $\rightarrow$ als grau markiert.
+                    \item Prozess wird wiederholt bis keine weißen Objekte mehr 
+                    \item Verbleibende weiße Objekte sind nicht erreichtbar $\Rightarrow$ Deallokieren 
+                \end{itemize}
+            \end{frame}
+
 
         \subsection{Java}
             \begin{frame}
