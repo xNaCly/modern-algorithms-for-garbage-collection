@@ -140,7 +140,7 @@
                     \item Eden
                     \begin{itemize}
                         \item Alle neuen Objekte werden hier allokiert
-                        \item Objekte welche eine gewisse Zeit überleben werden in den Survivor Space verschoben
+                        \item Objekte welche einen GC Lauf überleben, werden in den Survivor Space verschoben
                     \end{itemize}
                     \item Survivor
                     \begin{itemize}
@@ -224,6 +224,7 @@ struct PyObject {
                     \begin{itemize}
                         \item escape analysis
                         \item mark \& sweep
+                        \item Compiliert in Maschinen Code(AOT), GC in generierter Binary
                     \end{itemize}
                     \item Java
                     \begin{itemize}
@@ -312,7 +313,7 @@ struct PyObject {
                 \frametitle{Java - G1 GC Funktionsweise}
 
                 \begin{itemize}
-                    \item Wird eine Generation zu voll, so wird Garbage Collection gezielt für diesen Speicherbereich ausgeführt.
+                    \item Wird eine Generation zu voll, so wird Garbage Collection gezielt für eine/mehrere Speicherregionen der Generation ausgeführt.
                     \item Überlebende Objekte werden in einen neuen Bereich der gleichen oder darüberliegenden Generation kopiert
                         \\$\Rightarrow$ Kompaktierung
                     \item Dannach ist die Region leer und kann neu allokiert werden.
@@ -355,7 +356,7 @@ struct PyObject {
             \begin{itemize}
                 \item Der Owner einer Variable kann $n$ lesende Referenzen(via Pointer) und eine schreibende Referenz an andere Orte verleihen
                 \item Borrowing ist nur für einen bestimmten Zeitraum möglich (Lifetime)
-                \item Borrows dürfen nicht über den Lifetime des Owners hinausgehen, sichergestellt durch den Borrow Checker
+                \item Borrows dürfen nicht über die Lifetime des Owners hinaus bestehen, sichergestellt durch den Borrow Checker
             \end{itemize}
         \end{frame}
 
