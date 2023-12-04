@@ -1,0 +1,10 @@
+Go examples
+-----------
+
+All examples written in go in this paper are included in this directory. To
+find a section of the paper the code example references to, take a look at
+the comment at the first line. 
+
+Run a given example via the go compiler:
+
+    go run introduction.go

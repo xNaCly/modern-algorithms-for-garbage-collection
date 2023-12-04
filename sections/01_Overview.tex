@@ -32,12 +32,14 @@ showcases variables that will be garbage collected upon the scope of the
 
 \begin{listing}[H] 
     \begin{minted}{java} 
-class GarbageCollected {
-    public static void main(String[] args) {
-        var test1 = new Test();
-        var test2 = new Test();
+class Scope {
+    static class Test {
     }
-    public Test() {}
+
+    public static void main(String[] args) {
+        var test1 = new Scope.Test();
+        var test2 = new Scope.Test();
+    }
 }
     \end{minted}
     \caption{Java variables managed by the garbage collector}
@@ -54,8 +56,9 @@ not garbage collected due to all of them being stack allocated primitive types
 
 \begin{listing}[H] 
     \begin{minted}{java} 
-class NotGarbageCollected {
+class Scope1 {
     static int integer = 5;
+
     public static void main(String[] args) {
         byte newline = 0x1A;
         double pi = 3.1415;
@@ -120,13 +123,13 @@ rendering its value inaccessible.
 
 \begin{listing}[H] 
     \begin{minted}{Java} 
-public class Main {
+public class MemoryCategories {
     public static void main(String[] args) {
         var x = new Object();
         x = new Object();
         var y = new Object();
         y = new Object();
-        Main.f();
+        MemoryCategories.f();
     }
 
     private static void f() {
