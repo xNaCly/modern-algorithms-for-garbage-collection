@@ -77,12 +77,6 @@
                 \begin{itemize}
                     \item Peformance schlechter im Vergleich zu manuellem
                         management und borrow checker
-                        \begin{itemize}
-                            \item Latenz 
-                            \item RAM und CPU Verbrauch
-                            \item Generational, Mark \& Sweep: Scannen vom Heap langsam
-                            \item Reference counting: erhöhter Speicherverbrauch: 100 Objekte: $100*objektgroeße$ auf $100*(objektgroeße+countergroeße)$
-                        \end{itemize}
                     \item Einfluss von GC-zyklen auf Program nicht vorhersehbar
                     \item Manuelle Allokationen mit Speicherarena effizienter
                         für große Datenmengen als jedes Objekt einzeln
@@ -104,15 +98,15 @@
         \end{frame}
 
         \subsection{Mark \& Sweep}
-            \begin{frame}
-                \frametitle{Strategien - Mark \& Sweep}
-                \begin{itemize}
-                    \item Scannt den Heap anfangend von Root Objekten
-                    \item markiert Objekte die am Leben sind
-                    \item während obigem meist Stop the World
-                    \item deallokiert alle Objekte die nicht als am Leben markiert sind
-                \end{itemize}
-            \end{frame}
+            % \begin{frame}
+            %     \frametitle{Strategien - Mark \& Sweep}
+            %     \begin{itemize}
+            %         \item Scannt den Heap anfangend von Root Objekten
+            %         \item markiert Objekte die am Leben sind
+            %         \item während obigem meist Stop the World
+            %         \item deallokiert alle Objekte die nicht als am Leben markiert sind
+            %     \end{itemize}
+            % \end{frame}
 
             \begin{frame}
                 \frametitle{Strategien - Mark \& Sweep}
