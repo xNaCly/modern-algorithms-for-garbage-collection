@@ -348,7 +348,7 @@ struct PyObject {
             \end{itemize}
             Um auf Variablen an mehreren Stellen zugreifen zu können, kann diese geborrowed (verliehen) werden:
             \begin{itemize}
-                \item Der Owner einer Variable kann $n$ lesende Referenzen(via Pointer) und eine schreibende Referenz an andere Orte verleihen
+                \item Der Owner einer Variable kann diese an andere Strukturen verleihen.
                 \item Borrowing ist nur für einen bestimmten Zeitraum möglich (Lifetime)
                 \item Borrows dürfen nicht über die Lifetime des Owners hinaus bestehen, sichergestellt durch den Borrow Checker
             \end{itemize}
