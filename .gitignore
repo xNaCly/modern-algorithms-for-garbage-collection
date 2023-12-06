@@ -16,3 +16,4 @@ _minted-main
 *.pdf
 *.synctex(busy)
 *.vrb
+*.pyg

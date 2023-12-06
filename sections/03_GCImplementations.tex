@@ -23,6 +23,11 @@ Instead G1GC uses a heap divided into regions usually 1 MB - 32 MB in size.
 Each region is assigned to one of the generations.
 These generations are called Eden, Survivor and Old. \cite{java_g1_getting_started}
 
+Large objects are stored in their own regions, called humongous regions
+and not inside the Young/Old generation regions.
+This is done to simplify the garbage collection of large objects which
+would cause problems when stored inside the Young/Old generation regions \cite[2.1 Heap Layout]{java_g1_2004}.
+
 % TODO: compacting, shendoah
-% TODO: configurable gc pauses (length)
+% TODO: configurable gc pauses (length, realtime-ish)
 

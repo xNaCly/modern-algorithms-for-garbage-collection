@@ -261,6 +261,42 @@
         urlaccessdate={2023-11-20}
     }
 
+    @inproceedings{java_g1_deconstruting_2020,
+        author = {Zhao, Wenyu and Blackburn, Stephen M.},
+        title = {Deconstructing the Garbage-First Collector},
+        year = {2020},
+        isbn = {9781450375542},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        url = {https://doi.org/10.1145/3381052.3381320},
+        doi = {10.1145/3381052.3381320},
+        abstract = {Garbage-First is among today's most widely used garbage collectors. It is used in the HotSpot and OpenJDK virtual machines, and shares algorithmic foundations with three other important contemporary collectors: Shenandoah, C4, and ZGC. However, the design of the core algorithms and the performance tradeoffs they manifest have not been carefully analyzed in the literature. In this work, we deconstruct the G1 algorithm and re-implement it from first principles. We retrospectively develop a concurrent, region-based evacuating collector, CRE, which captures the principal design elements shared by G1, Shenandoah, C4, and ZGC. We then evaluate the impact of each of the major elements of G1 on performance, including pause time, remembered set footprint and barrier overheads. We find that G1's concurrent marking and generational collection reduces the 95-percentile GC pauses by 64\% and 93\% respectively. We find that the space overhead of G1's remembered sets is very low, typically under 1\%. We also independently measure the barriers used by G1 and find that they have an overhead of around 12\% with respect to total performance. This analysis gives users and collector designers insights into the garbage-first collector and the other fixed-size region-based concurrent evacuating collectors, which we hope will lead to better use of the collectors and provoke future improvements.},
+        booktitle = {Proceedings of the 16th ACM SIGPLAN/SIGOPS International Conference on Virtual Execution Environments},
+        pages = {15–29},
+        numpages = {15},
+        keywords = {garbage collection, Java, memory management, concurrent garbage collection, barriers},
+        location = {Lausanne, Switzerland},
+        series = {VEE '20}
+    }
+
+    @inproceedings{java_g1_2004,
+        author = {Detlefs, David and Flood, Christine and Heller, Steve and Printezis, Tony},
+        title = {Garbage-First Garbage Collection},
+        year = {2004},
+        isbn = {1581139454},
+        publisher = {Association for Computing Machinery},
+        address = {New York, NY, USA},
+        url = {https://doi.org/10.1145/1029873.1029879},
+        doi = {10.1145/1029873.1029879},
+        abstract = {Garbage-First is a server-style garbage collector, targeted for multi-processors with large memories, that meets a soft real-time goal with high probability, while achieving high throughput. Whole-heap operations, such as global marking, are performed concurrently with mutation, to prevent interruptions proportional to heap or live-data size. Concurrent marking both provides collection "completeness" and identifies regions ripe for reclamation via compacting evacuation. This evacuation is performed in parallel on multiprocessors, to increase throughput.},
+        booktitle = {Proceedings of the 4th International Symposium on Memory Management},
+        pages = {37–48},
+        numpages = {12},
+        keywords = {parallel garbage collection, soft real-time garbage collection, concurrent garbrage collection, garbage collection, garbage-first garbage collection},
+        location = {Vancouver, BC, Canada},
+        series = {ISMM '04}
+    }
+
 // Rust / borrow checker
 @article{rust_borrow_formalism_2021,
   doi = {10.1145/3443420},
