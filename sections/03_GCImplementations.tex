@@ -24,6 +24,14 @@ the memory areas for each generation in G1GC are not continuous in memory.
 Instead G1GC uses a heap divided into regions usually 1 MB - 32 MB in size.
 Each region is assigned to one of the generations or unused.
 These generations are called Eden, Survivor and Old. \cite{java_g1_getting_started}
+An example heap layout with regions assigned to the generations is shown in \autoref{fig:g1_heap_layout}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.7\textwidth]{images/G1_Heap_Layout.drawio.png}
+    \caption{Heap layout of the G1 garbage collector}
+    \label{fig:g1_heap_layout}
+\end{figure}
 
 Using constant sized regions instead of continuous memory areas has the advantage
 that the heap does not need to be contiguous in memory for generational garbage collection to work.
@@ -38,16 +46,6 @@ New objects are allocated into this region until.
 Once the region is full, it will be marked as full and a new currently unused region will be
 chosen as the new allocation region \cite[2.1 Allocation]{java_g1_2004}.
 If no free memory region is available, a new one will be allocated through the operating system.
-
-% Allocating heap memory from a larger pre-allocated memory region is
-% good for performance because it only requires bumping the pointer inside the
-% memory region by the size of the allocated object.
-% This is sometimes called bump-allocating.
-% Allocating memory without pre-allocating a larger memory region requires
-% calling to the operating system to allocate a new memory region for each object.
-% This would be pretty slow for Java in particular because classes/objects are
-% used very frequently and are always heap allocated.
-% TODO: source for slow allocations, maybe throw this out
 
 Large objects are stored in their own regions, called humongous regions
 and not inside the Young/Old generation regions.
@@ -76,5 +74,4 @@ specified time goal \cite[3.2.1 Predicting Evacuation Pause Times]{java_g1_2004}
 The pause time goal and desired intervals for garbgage collection pauses can be configured using
 JVM command line arguments \cite[Ergonomic Defaults for G1 GC]{java_g1_getting_started}.
 
-% TODO: shendoah??
-
+% TODO: shenandoah mention?
