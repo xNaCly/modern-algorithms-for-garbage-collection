@@ -12,10 +12,17 @@ standard tool chain provides a runtime library included in all executables
 created by the \textit{Go} compiler. This library contains the garbage
 collector \cite[Introduction]{go_gcguide_2022}.
 
-Garbage collection as a whole is an umbrella term for
-different concepts, algorithms and ideas. This chapter includes the
-differentiation between these and thereby introduces terms necessary for
-understanding the following chapters. 
+
+Garbage collection can be implemented using a variety of strategies, each
+differing in their code complexity, RAM/CPU usage and execution speed \cite[4.3
+Benchmarks]{gc-performance_2004} \cite[Motivation and Historical
+Perspective]{gc-hardware_2018}.
+
+Garbage collection as a whole is an umbrella term for different concepts,
+algorithms and ideas. This chapter includes the differentiation between these
+and thereby introduces terms necessary for understanding the following
+chapters. 
+
 
 \section{Scope}
 \label{sec:scope}
@@ -70,14 +77,7 @@ class Scope1 {
     \label{code:java_non_gc_variables}
 \end{listing}
 
-\section{Strategies}
-
-Garbage collection can be implemented using a variety of strategies, each
-differing in their code complexity, RAM/CPU usage and execution speed \cite[4.3
-Benchmarks]{gc-performance_2004} \cite[Motivation and Historical
-Perspective]{gc-hardware_2018}.
-
-\subsection{Tracing}
+\section{Tracing}
 
 Most commonly the term garbage collection is used to refer to tracing garbage
 collection. This strategy of automatically managing memory is a common way of
@@ -94,7 +94,18 @@ Collection]{go_gcguide_2022} and \textit{Ocaml} \cite[Garbage Collection,
 Reference Counting, and Explicit Allocation]{ocmal_gc_unknown} use this
 strategy for deallocating unused memory regions.
 
-\subsubsection{Categorizing memory}
+As introduced before the main idea behind tracing garbage collection is to
+trace the memory set\footnote{Virtual memory the program makes use of}. Garbage
+collection is often performed in cycles. Cycles are triggered when certain
+conditions are met, such as the program running out of memory and therefore not
+being able to satisfy an allocation request or the cycles are ran on a
+predefined interval. The process of tracing memory and deallocating memory
+require separation, they are therefore often split into different garbage
+collection cycles. The following concepts and implementation details can be and
+are generally intertwined in modern garbage collectors \cite[The GC
+cycle]{go_gcguide_2022} \cite{ocmal_gc_unknown}.
+
+\subsection{Categorizing memory}
 \label{sec:categorizing_memory}
 
 Objects\footnote{Dynamically allocated memory region containing one or more
@@ -142,20 +153,8 @@ public class MemoryCategories {
 \end{listing}
 
 
-\subsubsection{Implementations}
 
-As introduced before the main idea behind tracing garbage collection is to
-trace the memory set\footnote{Virtual memory the program makes use of}. Garbage
-collection is often performed in cycles. Cycles are triggered when certain
-conditions are met, such as the program running out of memory and therefore not
-being able to satisfy an allocation request or the cycles are ran on a
-predefined interval. The process of tracing memory and deallocating memory
-require separation, they are therefore often split into different garbage
-collection cycles. The following concepts and implementation details can be and
-are generally intertwined in modern garbage collectors \cite[The GC
-cycle]{go_gcguide_2022} \cite{ocmal_gc_unknown}.
-
-\paragraph{Mark and Sweep}
+\subsection{Mark and Sweep}
 
 Garbage collectors using the \textit{mark and sweep}-concept traverse the
 object graph\footnote{Objects and pointers to objects} starting from the
@@ -167,7 +166,7 @@ object graph as alive. This stage of the process is referred to as
 the memory on the heap and deallocating all non marked objects \cite[Tracing
 Garbage Collection]{go_gcguide_2022}.
 
-\paragraph{Generational}
+\subsection{Generational}
 \label{sec:gc_generational}
 
 Generational garbage collection is based on the empirical observation that
@@ -183,7 +182,7 @@ Collection]{age-based-gc_1999}. This technique results in fast incremental
 garbage collection, considering one memory region at a time is required to be
 collected. \cite[3 Benchmarks]{age-based-gc_1999}
 
-\paragraph{Stop the world}
+\subsection{Stop the world}
 
 Stop the world garbage collector refer to the process of halting the execution
 of the program for running a garbage collection cycle. Therefore guaranteeing
@@ -195,7 +194,7 @@ Collection Algorithms]{gc-multiprocess_1975}. This technique is inherently
 unsuited for applications requiring real-time performance, such as games or
 web servers in which unexpected latency has drastic results.
 
-\subsection{Reference Counting}
+\section{Reference Counting}
 
 Reference counting garbage collection is defined as each object keeping track
 of the amount of references made to it. This reference counter is incremented
@@ -217,7 +216,7 @@ sophisticated algorithms. The following chapters highlight a selection of
 problems commonly occurring when implementing reference counting garbage
 collection \cite[2. Overview]{gc-references_2021}.
 
-\subsubsection{Memory usage}
+\subsection{Memory usage}
 Reference counting requires attaching a reference counter onto allocated
 objects, thus increasing the overall memory footprint proportionally to the
 amount of allocated objects and a reference counter for each object.
@@ -238,7 +237,7 @@ Memory footprint with reference counting:
 nm + nr
 \end{align*}
 
-\subsubsection{Cycles}
+\subsection{Cycles}
 \label{sec:reference_counting_cycles}
 
 Two or more objects creating references to each other is described as a
@@ -250,7 +249,7 @@ A way to prevent reference cycles is by extending reference counting garbage
 collection to specifically detecting cycles, as is the case in \textit{CPython}
 \cite[1.10 Reference Counts]{python-extending-gc_2008}. 
 
-\subsubsection{Increment and Decrement Workload}
+\subsection{Increment and Decrement Workload}
 
 Each reference creation and reference falling out of scope requires
 modification of the reference count of one or more objects \cite[6.1 Immediate
@@ -261,7 +260,7 @@ object is no longer referenced \cite[6.2 Deferred Reference
 Couting]{gc-generational-scavenging_1984} or merging reference counter
 modifications \cite[Abstract]{gc-on-the-fly_2006}.
 
-\subsubsection{Thread safety}
+\subsection{Thread safety}
 
 Reference counting garbage collection requires atomic operations in
 multithreaded environments to keep a consistent count of references. This
@@ -270,7 +269,7 @@ thread. This solution introduces significant memory overhead and is not
 commonly used \cite[1.2 Reference-Counting on a
 Multiprocessor]{gc-on-the-fly_2006}.
 
-\subsection{Escape Analysis}
+\section{Escape Analysis}
 
 The term \textit{escape analysis} describes a compile-time technique for
 determining where to store an object, either on the heap or the stack. At a
