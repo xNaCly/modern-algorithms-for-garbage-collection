@@ -1,21 +1,68 @@
 \chapter{Garbage collected Programming Languages}
 
-In this chapter, the used garbage collection implementations of two programming
-languages are presented. These are implementations of the theoretical concepts
-presented in \autoref{sec:overview}
+In this chapter, garbage collection implementations of two programming
+languages are presented. Both make use of the theoretical concepts presented
+in \autoref{sec:overview}.
 
 \section{Go}
+
+Go uses a tri-color, concurrent mark \& sweep garbage collector based on an
+algorithm introduced by Dijkstra in 1978 \cite{dijkstra-gc-1978}. Mark \& sweep
+garbage collection introduces the requirement of tracing all memory before any
+memory can be released \cite[The GC cycle]{go_gcguide_2022} for there could
+still be untraced pointers marking an object previously thought to be
+unreachable as reachable. This segments the gc cycles into \textit{marking} and
+\textit{sweeping} while also introducing the \textit{off} phase notating the
+garbage collector as inactive while no GC related work is required.
+
+\subsection{Detecting reachable objects}
+
+As the name suggests and introduced in \autoref{sec:gc_mark_sweep}, the go
+garbage collector determines whether or not an object is to be considered
+reachable by starting from the root objects (see
+\autoref{sec:categorizing_memory}) and scanning all following pointers and
+objects.
+
+As previously introduced, the employed algorithm for archiving this in an
+efficient way is based upon the previous work by Dijkstra. This approach
+revolves around three sets: the white set - all candidates for having their
+memory recycled, the black set - all objects without references to the white
+set and that are reachable from the roots, the grey set - objects reachable
+from the roots not yet scanned for references to the white objects.
+
+Using this, the algorithm considers all objects as white at the start of the
+given garbage collection cycle and starts the following process:
+
+\begin{enumerate}
+    \item An object from the grey set is picked 
+    \item Each white object it references to is moved to the grey set (neither
+        the object nor all referenced objects can be garbage collected) 
+    \item The current object is moved to the black set 
+    \item Repeat previous steps until grey set is empty
+\end{enumerate}
+
+\subsection{Removing unreachable objects}
+
+\subsection{Fine-tuning}
+
+The go garbage collector can be tweaked to fine-tune the trade-off between the
+garbage collectors CPU and its memory usage \cite[The GC
+cycle]{go_gcguide_2022}. This can be done by invoking the go runtime with an
+environment variable called \texttt{GOGC} \cite[GOGC]{go_gcguide_2022}.
+
 \section{Java}
 
-Java by default uses a generational garbage collector as introduced in \autoref{sec:gc_generational}.
-This garbage collector is called Garbage First (G1) and was made the default with Java 9 \cite{java_gc_comparison_2018}.
-Before that, Java used various types of mark and sweep collectors \cite{java_available_gcs}.
+Java by default uses a generational garbage collector as introduced in
+\autoref{sec:gc_generational}. This garbage collector is called Garbage First
+(G1) and was made the default with Java 9 \cite{java_gc_comparison_2018}.
+Before that, Java used various types of mark and sweep collectors
+\cite{java_available_gcs}.
 
 Beyond those there are many more garbage collectors available for Java that can
-be used by specifying them as a command line argument to the JVM.
-These are not relevant for this writing, as they are not used by default.
-Nonetheless these can be very useful when wanting to use a garbage collector
-tuned to a specific use case.
+be used by specifying them as a command line argument to the JVM. These are not
+relevant for this writing, as they are not used by default. Nonetheless these
+can be very useful when wanting to use a garbage collector tuned to a specific
+use case.
 
 \subsection{Garbage First Collector introduction}
 
