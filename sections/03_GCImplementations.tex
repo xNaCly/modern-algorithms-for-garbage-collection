@@ -122,7 +122,7 @@ An example heap layout with regions assigned to the generations is shown in \aut
 Using constant sized regions instead of continuous memory areas has the advantage
 that the heap does not need to be contiguous in memory for generational garbage collection to work.
 
-\subsection{Allocating memory}
+\subsection{Allocating memory to new objects}
 
 When a object is allocated onto the heap, it will be first allocated into the
 Eden region inside of the Young generation as outlined in the theoretical concept
@@ -162,14 +162,21 @@ because collecting regions with more garbage will result in more memory being fr
 
 \subsubsection{Evacuation}
 
-% TODO: collection
-% TODO: compacting
+After deciding which regions to collect, G1 will start the evacuation phase.
+In this phase, G1 will copy all live objects from the selected regions to other regions.
+This can be either a new memory region or one that is only partly filled.
+After copying all live objects, the old memory regions will be freed resulting
+in the unused memory regions being freed.
+Objects will be copied to regions of the same generation as the region they were copied from
+or one generation older, if the objects are old enough.
+The objects are copied sequentially into the new region without any gaps between them,
+resulting in a compacted memory region \cite[2.3 Evacuation Pauses]{java_g1_2004}.
 
 \subsection{Realtime goal of G1}
 
 G1 tries have low pause times for garbage collection improving the
 responsiveness of the application and allow for usage in applications
-requiring predictable pause times. However pause times are only goals
+requiring predictable pause times. However pause times are only goals,
 and there are no guarantees that they will be met
 \cite[3.2 Satisfying a Soft Real-Time Goal]{java_g1_2004}.
 
