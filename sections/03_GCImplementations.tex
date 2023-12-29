@@ -7,13 +7,15 @@ in \autoref{sec:overview}.
 \section{Go}
 
 Go uses a tri-color, concurrent mark \& sweep garbage collector based on an
-algorithm introduced by Dijkstra in 1978 \cite{dijkstra-gc-1978}. Mark \& sweep
-garbage collection introduces the requirement of tracing all memory before any
-memory can be released \cite[The GC cycle]{go_gcguide_2022} for there could
-still be untraced pointers marking an object previously thought to be
-unreachable as reachable. This segments the gc cycles into \textit{marking} and
-\textit{sweeping} while also introducing the \textit{off} phase notating the
-garbage collector as inactive while no GC related work is required.
+algorithm introduced by Dijkstra in 1978 \cite{dijkstra-gc-1978}. The go
+compiler employs \textit{escape analysis} for reducing the amount of heap
+allocated objects at compile time (see \autoref{sec:escape_analysis}). Mark \&
+sweep garbage collection introduces the requirement of tracing all memory
+before any memory can be released \cite[The GC cycle]{go_gcguide_2022} for
+there could still be untraced pointers marking an object previously thought to
+be unreachable as reachable. This segments the gc cycles into \textit{marking}
+and \textit{sweeping} while also introducing the \textit{off} phase notating
+the garbage collector as inactive while no GC related work is required.
 
 \subsection{Detecting reachable objects}
 
@@ -21,34 +23,71 @@ As the name suggests and introduced in \autoref{sec:gc_mark_sweep}, the go
 garbage collector determines whether or not an object is to be considered
 reachable by starting from the root objects (see
 \autoref{sec:categorizing_memory}) and scanning all following pointers and
-objects.
+objects - this process is defined as the \textit{mark} stage of the mark \&
+sweep algorithm.
 
 As previously introduced, the employed algorithm for archiving this in an
 efficient way is based upon the previous work by Dijkstra. This approach
 revolves around three sets: the white set - all candidates for having their
 memory recycled, the black set - all objects without references to the white
 set and that are reachable from the roots, the grey set - objects reachable
-from the roots not yet scanned for references to the white objects.
-
-Using this, the algorithm considers all objects as white at the start of the
-given garbage collection cycle and starts the following process:
+from the roots not yet scanned for references to the white objects. Considering
+this assumption, the algorithm considers all objects as white at the start of
+the given garbage collection cycle and starts the following process:
 
 \begin{enumerate}
-    \item An object from the grey set is picked 
-    \item Each white object it references to is moved to the grey set (neither
-        the object nor all referenced objects can be garbage collected) 
-    \item The current object is moved to the black set 
-    \item Repeat previous steps until grey set is empty
+    \item An object from the grey set is picked.
+    \item Each white object the current object references is moved to the grey
+        set (neither the object nor all referenced objects can be garbage
+        collected) 
+    \item The current object is moved to the black set.
+    \item Repeat previous steps until the grey set is empty.
 \end{enumerate}
+
+This algorithm has the advantage of allowing ``on-the-fly'' garbage collection
+without halting the whole system for long time periods, therefore reducing the
+latency typically imposed onto systems by garbage collection
+\cite[Abstract]{dijkstra-gc-1978}. This is implemented by marking objects as
+soon as they are allocated and during their mutation, thus maintaining the
+previously introduced sets. The garbage collector can monitor the set sizes and
+clean up periodically, instead of doing so as soon as its required. This
+approach allows for skipping the scan of the whole allocated heap on each
+garbage collection cycle \cite[6. A Fine-Grained Solution]{dijkstra-gc-1978}.
 
 \subsection{Removing unreachable objects}
 
 \subsection{Fine-tuning}
 
 The go garbage collector can be tweaked to fine-tune the trade-off between the
-garbage collectors CPU and its memory usage \cite[The GC
+garbage collectors CPU and memory usage \cite[The GC
 cycle]{go_gcguide_2022}. This can be done by invoking the go runtime with an
 environment variable called \texttt{GOGC} \cite[GOGC]{go_gcguide_2022}.
+
+The go garbage collector tries to finish a collection cycle before the current
+total heap size is bigger than the target heap size.
+
+\begin{equation}
+    \textrm{Target heap memory} = \textrm{Live heap} + \left(\textrm{Live heap} + \textrm{GC roots}\right) \cdot \textrm{GOGC} / 100
+\end{equation}
+
+For the given values of a live heap size of 8 MiB\footnote{MiB: 1024 Kibibytes}, 1 MiB of goroutine stacks,
+1 MiB of pointers in global variables and a value of 100 for the \texttt{GOGC}
+environment variable the equation results in:
+
+\begin{align}
+    \textrm{Target heap memory} &= 8 \ \textrm{MiB} + \left(8 \ \textrm{MiB} + 1 \ \textrm{MiB}\right) \cdot 100 / 100 \\
+                                &= 17 \ \textrm{MiB}
+\end{align}
+
+This formula allows for a precise garbage collection cycle trigger, such as
+running a garbage collection cycle once the specific threshold of newly
+allocated memory, here the 10 MiB cumulated from the 8 MiB live heap, 1 MiB
+goroutine stack and 1 MiB global variables. The \texttt{GOGC} variable controls
+this threshold. A value of 100 signals the garbage collector to switch into the
+marking stage once 100\% of the size of previous live heap is allocated since
+the last garbage collection cycle, a value of 50 halves the threshold from 10
+MiB to 5 MiB, the value 200 doubles the threshold to 20 MiB
+\cite[GOGC]{go_gcguide_2022}.
 
 \section{Java}
 
