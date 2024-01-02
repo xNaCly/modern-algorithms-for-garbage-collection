@@ -1,0 +1,32 @@
+\chapter{Conclusion}
+
+In this paper, we have explored the concept and techniques of garbage collection,
+a process of automatically reclaiming heap allocated memory that is no longer in
+use by the program. We have reviewed various garbage collection strategies, such
+as reference counting and tracing with mark \& sweep and generational garbage collection,
+and analyzed their trade-offs in terms of code complexity, memory usage, CPU overhead,
+and execution speed.
+
+We also have compared garbage collection with other memory management techniques,
+such as manual memory management and the lifetimes \& borrow checking concept from Rust.
+The performance, safety, and ease-of-use of these techniques were evaluated and the
+challenges and opportunities they pose for software development were discussed.
+Manual memory management is fast but error prone and can lead to memory leaks and
+use-after-free errors. Lifetimes and borrow checking is safe and fast but requires
+the programmer to adhere to a set of rules that can be difficult to satisfy.
+Garbage collection is safe and easy to use but introduces some overhead and latency.
+
+Furthermore, we have presented the garbage collection implementations of two 
+programming languages: Go and Java. We have described how Go uses a tri-color,
+concurrent mark \& sweep garbage collector based on an algorithm by Dijkstra,
+and how it employs escape analysis to reduce the amount of heap allocated objects.
+We have also explained how Java uses a generational garbage collector called 
+Garbage First (G1) that divides the heap into constant sized regions and prioritizes
+regions with more garbage for collection.
+
+Garbage collection is a fascinating and important topic in computer science and
+programming languages. It has a significant impact on the performance, reliability, 
+and usability of software systems. As memory demands and concurrency levels increase, 
+garbage collection techniques will need to evolve and adapt to meet the challenges 
+and opportunities of the future.
+
